@@ -106,10 +106,15 @@ li a:hover {
 /*
  FORM
  */
+
 div.form {
-    display:inline;
-    overflow: hidden;
+    box-shadow: 0 5px 12px 0 rgba(0, 0, 0, 0.7);
+    bottom: 0px;
+    left: 0px;
     width: 100%;
+    padding: 10px;
+    position: fixed;
+    background-color: rgba(255,255,255,0.835)
 }
 
 input.email {
@@ -118,12 +123,14 @@ input.email {
     font-size: 20px;
     padding:8px 0; 
     text-indent:2%;
+    float: center;
+    background-color: rgba(255,255,255,0); 
 }
 
 input.button {
-    background-color: #aaa; 
+    background-color: rgba(180,180,180,0.7); 
     border: 0 none;
-    color: #FFFFFF; 
+    color: rgba(255,255,255,0.835); 
     cursor: pointer; 
     font-size: 20px; 
     font-weight: bold; 
@@ -134,14 +141,14 @@ input.button {
     text-align: center; 
     text-decoration: none; 
     vertical-align: top; 
-    white-space: nowrap; 
-    width: auto;
+    white-space: nowrap;
 }
 
 /*
  FOOTER
  */
 footer {
+    height: 120px;
 	padding: 30px 0 !important;
 	margin: 0 auto !important;
 	font-family: 'Open Sans', Arial;
