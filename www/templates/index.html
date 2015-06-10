@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>FrikiWeek'15</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="google-site-verification" content="2JIx_A4UTRNYWm76Ux3KqW2OGW8Ee726BcX8YUp5Vd4" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+	<link href="{{ url_for('static', filename='mailchimp.css') }}" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div>
+	<header class="container">
+		<div id="h_logo">
+			<img src="{{ url_for('static', filename='images/logo_small.jpg') }}" alt="Logo de la Frikiweek 2015" />
+		</div>
+		<div id="h_menu">
+			<ul id="navlist">
+			{% for item in navigation %}
+				{% if item.type == "text" %}
+					<li><a href="#{{ item.id }}">{{ item.title|upper }}</a></li>
+				{% endif %}
+			{% endfor %}
+			</ul>
+		</div>
+	</header>
+	<div id="main_photo">
+	</div>
+	<main>
+	{% for fragment in container %}
+		<div id="{{ fragment.id }}" class=
+		{% if loop.index % 2 %}
+			"bg-white"
+		{% else %}
+			"bg-grey"
+		{% endif %}>
+		
+		{% if fragment.img %}
+			<div class="content-image">
+				<img src="{{ fragment.img }}" />
+			</div>
+		{% endif %}
+			<div class="container article">
+				<h1>{{ fragment.title|capitalize }}</h1>
+				<article>{{ fragment.content|safe }}</article>
+			</div>
+		</div>
+	{% endfor %}
+	</main>
+	<footer class="container">
+		Copyleft 2015, EPSEM · Universitat Politècnica de Catalunya<br />
+		Troban's a <a href="http://facebook.com/FrikiWeek">facebook</a> i a <a href="http://twitter.com/frikiweek">twitter</a><br />
+		<em><small>Amb la tecnologia de <a href="http://flask.pocoo.org/">Flask</a> i <a href="https://www.python.org/">Python</a></small></em>
+	</footer>
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-63919703-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
