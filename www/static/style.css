@@ -104,6 +104,41 @@ li a:hover {
 }
 
 /*
+ FORM
+ */
+div.form {
+    display:inline;
+    overflow: hidden;
+    width: 100%;
+}
+
+input.email {
+    border:1px solid #999; 
+    -webkit-appearance:none;
+    font-size: 20px;
+    padding:8px 0; 
+    text-indent:2%;
+}
+
+input.button {
+    background-color: #aaa; 
+    border: 0 none;
+    color: #FFFFFF; 
+    cursor: pointer; 
+    font-size: 20px; 
+    font-weight: bold; 
+    height: 42px; 
+    line-height: 42px; 
+    margin: 0 0 0 15px; 
+    padding: 0 22px; 
+    text-align: center; 
+    text-decoration: none; 
+    vertical-align: top; 
+    white-space: nowrap; 
+    width: auto;
+}
+
+/*
  FOOTER
  */
 footer {

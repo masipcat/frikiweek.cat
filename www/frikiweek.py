@@ -17,31 +17,7 @@ def beta():
 	c1 = u"""<h2>Benvinguts al lloc web de la FrikiWeek!</h2>
 			<!--<img src="static/images/today.png" class="thumb" />-->
 			<p>Aquí trobareu tota la informació sobre aquest esdeveniment que des de fa quatre anys es celebra a l'Escola Politècnica Superior de Enginyeria de Manresa (EPSEM). Quasi bé hem acabat d'enllestir el calendari de tallers, però mentre no publiquem la llista definitva, us animem a deixar el vostre correu electrònic per què no us perdeu cap activitat!</p>
-			<p>Si vols més informació sobre la FW, <strong>dona'ns el teu correu electrònic i et farem arribar les novetats</strong> (prometem no enviar-te gaires correus).</p>""" \
-			+ u"""<div id="mc_embed_signup" style="width:450px;">
-			<form action="//frikiweek.us11.list-manage.com/subscribe/post?u=7fa5e5c14258dc6bff5457317&amp;id=7c8ce21dc0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-				<div id="mc_embed_signup_scroll">
-					<div class="mc-field-group">
-						<label for="mce-EMAIL">Correu electrònic </label>
-						<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL">
-					</div>
-					<div class="mc-field-group">
-						<label for="mce-FNAME">Nom </label>
-						<input type="text" value="" name="FNAME" class="" id="mce-FNAME">
-					</div>
-					<div class="mc-field-group" style="display:none;">
-						<label for="mce-LNAME">Last Name </label>
-						<input type="text" value="" name="LNAME" class="" id="mce-LNAME">
-					</div>
-					<div id="mce-responses" class="clear">
-						<div class="response" id="mce-error-response" style="display:none"></div>
-						<div class="response" id="mce-success-response" style="display:none"></div>
-					</div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-					<div style="position: absolute; left: -5000px;"><input type="text" name="b_7fa5e5c14258dc6bff5457317_7c8ce21dc0" tabindex="-1" value=""></div>
-					<div class="clear"><input type="submit" value="Subscriu-te" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-				</div>
-			</form>
-			</div>"""
+			<p>Si vols més informació sobre la FW, <strong>dona'ns el teu correu electrònic i et farem arribar les novetats</strong> (prometem no enviar-te gaires correus).</p>"""
 	c2 = u"""<p>Enguany, la FW'15 serà del dia <strong>29 de juny al 3 de juliol</strong>, on acabarem la setmana d'activitats amb la tradicional paella.</p>
 <p><em>La llista d'activitats estarà fixada durant els pròxims dies. Si estàs interessat en conèixer quines activitats es realitzaran, deixa'ns al teu correu electrònic.</em></p>"""
 	c3 = u"""<p><strong>Les dates definitives de l'esdeveniment encara no s'han fixat,</strong> però us podem avançar una data aproximada.</p>
