@@ -1,0 +1,166 @@
+/*
+ GENERAL
+ */
+body {
+	margin: 0;
+	height: 100%;
+	font-family: 'Open Sans', Arial;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #666;
+}
+
+p {
+	font-size: 20px;
+	font-weight: 300;
+	line-height: 42px;
+}
+
+a {
+	color:#0AE;
+	text-decoration: none;
+}
+
+ul, li {
+	font-size: 20px;
+	font-weight: 300;
+	line-height: 42px;
+}
+
+/*
+ MAIN, CONTENT
+ */
+.container {
+	width: 900px;
+	margin:0 auto;
+}
+
+.thumb {
+	opacity: 0.02;
+	margin-left: -400px;
+	margin-right: 10px;
+	width: 350px;
+	float: left;
+}
+
+.article {
+	padding:15px 0 15px 0 !important;
+}
+
+.bg-white {
+	background-color: #FFF;
+}
+
+.bg-grey {
+	background-color: #F9F9F9;
+	border:1px solid #EEE;
+	border-right: 0;
+	border-left: 0;
+}
+
+.content-image {
+	max-height: 300px;
+	overflow: hidden;
+}
+
+/*
+ MENU, HEADER, NAVIGATION
+ */
+header {
+	height: 85px;
+	padding: 30px 0 !important;
+}
+
+#main_photo {
+	height: 362px;
+	margin: 0 auto;
+	background-image: url("/static/images/cover.jpg");
+	background-position: center; 
+}
+
+#h_logo {
+	width: 235px;
+	float: left;
+}
+
+#h_menu {
+	width: 665px;
+	float: right;
+	margin-top: 15px;
+	text-align: right;
+}
+
+#navlist li {
+	display: inline;
+	list-style-type: none;
+	padding-right: 20px;
+}
+
+#navlist {
+	padding: 0;
+}
+
+li a {
+	color: #666;
+}
+
+li a:hover {
+	color: #99658b;
+}
+
+/*
+ FORM
+ */
+
+div.form {
+	box-shadow: 0 5px 12px 0 rgba(0, 0, 0, 0.7);
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	padding: 15px 0 10px 0;
+	position: fixed;
+	background-color: rgba(255,255,255,0.835);
+	text-align: center;
+}
+
+input.email {
+	border:1px solid #999; 
+	-webkit-appearance:none;
+	font-size: 20px;
+	padding:8px 0; 
+	text-indent:2%;
+	float: center;
+	margin-bottom: 5px;
+	background-color: rgba(255,255,255,0); 
+}
+
+input.button {
+	background-color: rgba(180,180,180,0.7); 
+	border: 0 none;
+	color: rgba(255,255,255,0.835); 
+	cursor: pointer; 
+	font-size: 20px; 
+	font-weight: bold; 
+	height: 42px; 
+	line-height: 42px; 
+	margin: 0 0 0 15px; 
+	padding: 0 22px; 
+	text-align: center; 
+	text-decoration: none; 
+	vertical-align: top; 
+	white-space: nowrap;
+}
+
+/*
+ FOOTER
+ */
+footer {
+	height: 120px;
+	padding: 30px 0 !important;
+	margin: 0 auto !important;
+	font-family: 'Open Sans', Arial;
+	font-size: 15px !important;
+	color: #999;
+	text-align: center;
+}
