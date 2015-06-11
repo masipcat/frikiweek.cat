@@ -26,6 +26,7 @@ def beta():
 				<li><strong>Xerrada sobre l'IoT i taller</strong> - per <strong>Joan Martínez</strong> <em>(tots els públics)</em></li>
 				<li><strong>Què és guifi.net?</strong> - per <strong>Francisco del Águila</strong> <em>(tots els públics)</em></li>
 				<li><strong>Introducció a les expressions regulars (RegEx)</strong> - per <strong>Jordi Masip</strong> <em>(requereix coneixements de Python)</em></li>
+				<li><strong>La paella friki!</strong> <em>(tots hi esteu convidats)</em></li>
 			</ul>
 			<p><em>i alguna sorpresa més...</em><br>
 			Si tens qualsevol dubte, envie'ns un correu a <strong>info[ensaimada]frikiweek.cat</strong>.</p>"""
