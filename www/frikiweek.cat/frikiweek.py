@@ -12,6 +12,10 @@ app = Flask(__name__)
 def redirection():
 	return beta()
 
+@app.route('/github')
+def github():
+        return redirect("http://github.com/masipcat/frikiweek.cat")
+
 @app.route('/beta')
 def beta():
 	c1 = u"""<h2>Benvinguts a la 5a edició de la FW!</h2>
