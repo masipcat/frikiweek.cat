@@ -30,13 +30,14 @@ ul, li {
 
 li.taller {
 	margin-bottom: 30px;
+	margin-right: 4px;
 	line-height: 30px;
 }
 
 .professor_taller {
 	font-size: 0.8em;
 	color: #888;
-	margin-left: 4px;
+	display: inline-block;
 }
 
 .taller_desc {
@@ -48,6 +49,7 @@ li.taller {
 	color:#FFF;
 	color:#000;
 	padding: 0px 6px 1px 6px;
+
 }
 
 /*
@@ -56,6 +58,12 @@ li.taller {
 .container {
 	width: 900px;
 	margin:0 auto;
+}
+
+@media screen and (max-width: 900px) {
+	.container {
+		width: 90%;
+	}
 }
 
 .thumb {
@@ -149,12 +157,12 @@ div.form {
 input.email {
 	border:1px solid #999; 
 	-webkit-appearance:none;
-	font-size: 20px;
+	font-size: 16px;
 	padding:8px 0; 
 	text-indent:2%;
 	float: center;
+	background-color: rgba(255,255,255,0);	
 	margin-bottom: 5px;
-	background-color: rgba(255,255,255,0); 
 }
 
 input.button {
@@ -162,10 +170,10 @@ input.button {
 	border: 0 none;
 	color: rgba(255,255,255,0.835); 
 	cursor: pointer; 
-	font-size: 20px; 
+	font-size: 16px; 
 	font-weight: bold; 
-	height: 42px; 
-	line-height: 42px; 
+	height: 36px; 
+	line-height: 36px; 
 	margin: 0 0 0 15px; 
 	padding: 0 22px; 
 	text-align: center; 
@@ -185,4 +193,61 @@ footer {
 	font-size: 15px !important;
 	color: #999;
 	text-align: center;
+}
+
+/*
+MOBILE
+*/
+.material-icons.menu {
+	font-size: 40px;
+	color: #666;
+	cursor: pointer;
+	display: none;
+}
+
+#navlist_m li {
+	list-style-type: none;
+	width: 90%;
+	margin:0 auto;
+	text-align: right;
+}
+
+#navlist_m {
+	display: none;
+	position:absolute;
+	left: 0px;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	background-color: #FFF;
+	padding: 0 0 20px 0;
+	overflow: hidden;
+}
+
+@media screen and (max-width: 900px) {
+	#foto {
+		height: auto;
+		width: 900px;
+	}
+	header {
+		height: 40px;
+	}
+	#h_logo {
+		width: auto;
+	}
+	#logo {
+		height: 40px;
+		wifth: auto;
+	}
+	#h_menu {
+		margin-top: 0;
+		width: auto;
+	}
+
+	#navlist {
+		display: none;
+	}
+	.material-icons.menu {
+		display: block;
+	}
 }
