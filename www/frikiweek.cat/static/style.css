@@ -28,6 +28,28 @@ ul, li {
 	line-height: 42px;
 }
 
+li.taller {
+	margin-bottom: 30px;
+	line-height: 30px;
+}
+
+.professor_taller {
+	font-size: 0.8em;
+	color: #888;
+	margin-left: 4px;
+}
+
+.taller_desc {
+	font-size: 0.8em;
+}
+
+.requisits {
+	background-color: rgba(00, 191, 232, 0.2);
+	color:#FFF;
+	color:#000;
+	padding: 0px 6px 1px 6px;
+}
+
 /*
  MAIN, CONTENT
  */
