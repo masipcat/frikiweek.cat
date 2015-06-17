@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	{% for item in map %}
+		<url>
+	      <loc>http://frikiweek.cat/#{{ item.id }}</loc>
+	      <lastmod>{{ item.lastmod }}</lastmod>
+	      <changefreq>daily</changefreq>
+	      <priority>0.8</priority>
+	   </url>
+	{% endfor %}
+</urlset> 
