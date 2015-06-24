@@ -1,4 +1,4 @@
-DB_NAME = "**"
-DB_USER = "**"
-DB_PASSWD = "**"
-DB_SERVER = "**"
+DB_NAME = "frikiweek"
+DB_USER = "fw_user"
+DB_PASSWD = "QiweiBonica"
+DB_SERVER = "d2.frikiweek.cat"

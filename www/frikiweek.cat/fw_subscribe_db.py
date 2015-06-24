@@ -27,16 +27,17 @@ from constants import *
 	- data
 """
 
-def database_connect():
+def db_connect():
 	db = MySQLdb.connect(host=DB_SERVER, user=DB_USER, passwd=DB_PASSWD, db=DB_NAME)
 	db.set_character_set('utf8')
-	dbc.execute('SET NAMES utf8;')
-	dbc.execute('SET CHARACTER SET utf8;')
-	dbc.execute('SET character_set_connection=utf8;')
 	return db
 
 def getCursor(db):
-	return db.cursor(MySQLdb.cursors.DictCursor)
+	dbc = db.cursor()
+	dbc.execute('SET NAMES utf8;')
+	dbc.execute('SET CHARACTER SET utf8;')
+	dbc.execute('SET character_set_connection=utf8;')
+	return dbc #db.cursor(MySQLdb.cursors.DictCursor)
 
 class Usuaris(object):
 

@@ -17,7 +17,7 @@ def database_connect(func):
 		try:
 			response = func(db, **kwarg)
 			db.commit()
-		except e:
+		except Exception as e:
 			db.rollback()
 			raise e
 		finally:
@@ -27,6 +27,7 @@ def database_connect(func):
 	func_wrapper.__name__ = func.__name__
 	return func_wrapper
 
+@fw_subs_blueprint.route('/login')
 @fw_subs_blueprint.route('/login/<error>')
 @database_connect
 def login(db, error=False):
@@ -36,8 +37,8 @@ def login(db, error=False):
 @fw_subs_blueprint.route('/check_login', methods=["POST"])
 @database_connect
 def check_login(db):
-	email = request.form['email']
-	passwd = request.form['passwd']
+	email = request.form.get('email')
+	passwd = request.form.get('passwd')
 	
 	if email and passwd:
 		uid = login(db, email, passwd)
@@ -49,6 +50,8 @@ def check_login(db):
 		session['user_id'] = uid
 		return redirect('/apuntat')
 
+	return redirect('/login/invalid')
+
 @fw_subs_blueprint.route('/tallers')
 @database_connect
 def apuntat(db):
@@ -57,7 +60,7 @@ def apuntat(db):
 	myTallers = getMyTallers(db, uid)
 	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data, 'inscrit': t in myTallers} for t in getTallers(db)]
 	
-	return render_template('apuntat.html', tallers=tallers)
+	return render_template('apuntador/apuntat.html', tallers=tallers)
 
 @fw_subs_blueprint.route('/logout/<success>')
 def logout(success=False):
