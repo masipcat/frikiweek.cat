@@ -1,6 +1,9 @@
 <h1>Benvingut a l'*apuntador d'activitats de la FW'15</h1>
-{% if error %}Usuari o contrassenya incorrectes{% endif %}
+{% if error %}
+<div>Usuari o contrassenya incorrectes</div>
+{% endif %}
 <form action="/check_login" method="POST">
-	<input name="email" placeholder="email" type="text" />
+	<input name="email" placeholder="email" type="text" {% if email %}value="{{ email }}"{% endif %} />
+	{% if email %}<input name="passwd" placeholder="passwd" type="password" />{% endif %}
 	<input type="submit" value="Endavant!" />
 </form>

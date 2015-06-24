@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template, make_response, redirect, request
-from fw_subscribe_db import *
+from flask import Blueprint, render_template, make_response, redirect, request, session
+import fw_subscribe_db as fw_db
 from utiles import *
 from constants import *
 
@@ -13,26 +13,36 @@ def database_connect(func):
 	Decorator que connecta automàticament a la DB, passa la instància com argument, fa commit()/rollback() i tanca la DB
 	"""
 	def func_wrapper(**kwarg):
-		db = db_connect()
-		try:
-			response = func(db, **kwarg)
-			db.commit()
-		except Exception as e:
-			db.rollback()
-			raise e
-		finally:
-			db.close()
+		db = fw_db.db_connect()
+		#try:
+		response = func(db, **kwarg)
+		db.commit()
+		#except Exception as e:
+		#	db.rollback()
+		#	raise e
+		#finally:
+		db.close()
 		return response
 
 	func_wrapper.__name__ = func.__name__
 	return func_wrapper
 
 @fw_subs_blueprint.route('/login')
-@fw_subs_blueprint.route('/login/<error>')
+@fw_subs_blueprint.route('/login/<extra>')
 @database_connect
-def login(db, error=False):
-	error = error and True
-	return render_template("apuntador/login.html", error=error)
+def login(db, extra=""):
+
+	uid = session['user_id']
+
+	if uid:
+		return redirect('/tallers')
+
+	if extra == "invalid":
+		return render_template("apuntador/login.html", error=True)
+	elif extra != "":
+		return render_template("apuntador/login.html", email=extra)
+	else:
+		return render_template("apuntador/login.html")
 
 @fw_subs_blueprint.route('/check_login', methods=["POST"])
 @database_connect
@@ -43,36 +53,39 @@ def check_login(db):
 	if not email:
 		return redirect('/login/invalid')
 		
-	exist = user_exist(db, email)
+	exist = fw_db.user_exist(db, email)
 
 	if not exist:
-		return redirect('/signup/jordi@masip.cat')
+		return redirect('/signup/%s' % email)
 
 	if not passwd:
-		return redirect('/login/invalid')
+		return redirect('/login/%s' % email)
 
-	uid = login(db, email, passwd)
+	status, uid = fw_db.login(db, email, passwd)
 	
-	if uid == ERR_USER_INVALID_LOGIN:
-		session['user_id'] = None
-		return redirect('/login/invalid')
-	
-	session['user_id'] = uid
-	return redirect('/tallers')
+	if status == fw_db.SUCCESS:
+		session['user_id'] = uid
+		return redirect('/tallers')
+
+	session['user_id'] = None
+	return redirect('/login/invalid')
 
 @fw_subs_blueprint.route('/tallers')
 @database_connect
 def apuntat(db):
 	uid = session['user_id']
 
-	myTallers = getMyTallers(db, uid)
-	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data, 'inscrit': t in myTallers} for t in getTallers(db)]
+	if not uid:
+		return redirect('/login/invalid')
+
+	#myTallers = fw_db.getMyTallers(db, uid)
+	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data, 'inscrit': False} for t in fw_db.getTallers(db)]
 	
 	return render_template('apuntador/apuntat.html', tallers=tallers)
 
+@fw_subs_blueprint.route('/logout')
 @fw_subs_blueprint.route('/logout/<success>')
 def logout(success=False):
-
 	if success == 'success':
 		return "S'ha tancat la sessió correctament"
 

@@ -40,25 +40,22 @@ def getCursor(db):
 	return dbc #db.cursor(MySQLdb.cursors.DictCursor)
 
 def user_exist(db, correu):
-
-        """
-        """
-        cursor = getCursor(db)
-	cursor.execute("SELECT correu FROM usuaris WHERE correu = ?", (correu, ))
-        return cursor.row_count > 0
-        
-
-def login(db, correu, contransenya):
-        
-        """
-        Aquesta funció donada BD, correu i contrasenya retorn id de usuari si la contrasenya es correcte, sinó ERR_USER_INVALID_LOGIN
-        """
 	cursor = getCursor(db)
-	cursor.execute("SELECT id, contrasenya FROM usuaris WHERE correu = ?", (correu, ))
-        uid, contra = cursor.fetchone()
-        if contrasenya == utiles.sha1(cursor.fetchone()):
-                return (SUCCESS, uid)
-        return (ERR_USER_INVALID_LOGIN, None)
+	cursor.execute("SELECT COUNT(*) FROM usuaris WHERE correu=%s", [correu])
+	return cursor.fetchone()[0] > 0
+
+def login(db, correu, contrasenya):  
+	"""
+	Aquesta funció donada BD, correu i contrasenya retorn id de usuari si la contrasenya es correcte, sinó ERR_USER_INVALID_LOGIN
+	"""
+	cursor = getCursor(db)
+	cursor.execute("SELECT id FROM usuaris WHERE correu=%s AND contrasenya=%s", (correu, utiles.sha1(contrasenya)))
+	uid = cursor.fetchone()[0]
+	
+	if uid:
+		return (SUCCESS, uid)
+
+	return (ERR_USER_INVALID_LOGIN, None)
 
 class Usuaris(object):
 
