@@ -27,16 +27,6 @@ def getFileName(s):
 	r = re.findall(r"([^/\\]+)\.\w+$", s)
 	return "" if len(r) == 0 else r[0]
 
-"""def connectToDB():
-	return None, None
-	db = MySQLdb.connect(host="---", user="---", passwd="---", db="---")
-	db.set_character_set('utf8')
-	dbc = db.cursor(MySQLdb.cursors.DictCursor)
-	dbc.execute('SET NAMES utf8;')
-	dbc.execute('SET CHARACTER SET utf8;')
-	dbc.execute('SET character_set_connection=utf8;')
-	return db, dbc"""
-
 def isValidIdentifier(id):
 	return re.match(r"[\d\w]{40}", id)
 

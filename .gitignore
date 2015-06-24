@@ -1,2 +1,6 @@
 
 *.pyc
+
+Thumbs.db
+
+*.fw.png

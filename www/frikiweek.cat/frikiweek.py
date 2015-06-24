@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, redirect, url_for, send_from_directory, make_response, render_template
+from flask import Flask, request, redirect, url_for, send_from_directory, make_response, render_template, session
+from flask.ext.session import Session
+from fw_subscribe import fw_subs_blueprint
 from werkzeug import secure_filename
 from utiles import *
-import os, json, datetime
+import json, datetime
 
 app = Flask(__name__)
+
+SESSION_TYPE = 'redis'
+app.config.from_object(__name__)
+Session(app)
 
 @app.route('/')
 def redirection():
@@ -46,9 +52,9 @@ def getNavigation():
 			<p>La FW és una iniciativa nascuda dels estudiants del Grau en Enginyeria de Sistemes TIC, que <strong>té com a objectiu intercanviar coneixements, relacionats amb les TIC, entre estudiants i interessats</strong>.</p> <p>La FW se celebra la setmana posterior als exàmens finals dels estudiants de TIC. És a dir, la última setmana de juny (vés a les <a href="#activitats">activitats</a> per a més informació). Aquí trobareu tota la informació sobre aquest esdeveniment que des del 2011 es celebra a l'<strong>Escola Politècnica Superior d'Enginyeria de Manresa</strong> (EPSEM, UPC). </p>
 			<p>Tot seguit trobareu a l'apartat <a href="#activitats">activitats</a> un llistat provisional de les activitats que es realitzaran enguany, però si vols que t'avisem quan obrim les inscripcions (gratuïtes, excepte la paella), deixa el teu correu electrònic per no perdre't cap activitat!</p>"""
 	c2 = u"""<p>Enguany, la FW'15 serà del dia <strong>29 de juny al 3 de juliol</strong>, on acabarem la setmana d'activitats amb la tradicional paella.</p>
-			<p><strong>La llista definitiva d'activitats estarà fixada durant els pròxims dies. Estigues atent!</strong></p>
+			<p>Per fi tenim la llista definitiva d'activitats! <strong>Apunta't ara, només tardaràs un minut!</strong> Per fer-ho, vés a l'<a href="/login">*apuntador</a> d'activitats.</p>
 			<ul>{0}</ul>
-			<p>Estem acabant de fixar les dates i de preparar el mètode de subscripció. <strong>Si no et vols perdre cap correu subscriu-te</strong> i t'avisarem quan ho tinguem tot ben programat.
+			<p><strong>Si no et vols perdre cap correu subscriu-te</strong> i t'avisarem quan ho tinguem tot ben programat.
 			Si tens qualsevol dubte, envia'ns un correu a <strong>info[ensaimada]frikiweek.cat</strong>.</p>""".format(tallers)
 	#c3 = u"""<p><strong>Les dates definitives de l'esdeveniment encara no s'han fixat,</strong> però us podem avançar una data aproximada.</p>
 	#		<p>Cada any la FW es celebra una setmana després dels examens finals, de manera que es celebrarà entre l'última setmana de juny i la primera de juliol</p>"""
