@@ -13,15 +13,22 @@ def database_connect(func):
 	Decorator que connecta automàticament a la DB, passa la instància com argument, fa commit()/rollback() i tanca la DB
 	"""
 	def func_wrapper(**kwarg):
-		db = fw_db.db_connect()
-		#try:
-		response = func(db, **kwarg)
-		db.commit()
-		#except Exception as e:
-		#	db.rollback()
-		#	raise e
-		#finally:
-		db.close()
+		if current_app.debug:
+			db = fw_db.db_connect()
+			response = func(db, **kwarg)
+			db.commit()
+			db.close()
+		else:
+			try:
+				db = fw_db.db_connect()
+				response = func(db, **kwarg)
+				db.commit()
+			except Exception as e:
+				db.rollback()
+				return "Alguna cosa no ha anat bé :(<br />Posa't amb contacte amb info[arroba]frikiweek.cat"
+			finally:
+				db.close()
+
 		return response
 
 	func_wrapper.__name__ = func.__name__
@@ -67,7 +74,7 @@ def check_login(db):
 		session['user_id'] = uid
 		return redirect('/tallers')
 
-	session['user_id'] = None
+	session.pop('user_id', None)
 	return redirect('/login/invalid')
 
 @fw_subs_blueprint.route('/tallers')
@@ -78,8 +85,8 @@ def apuntat(db):
 	if not uid:
 		return redirect('/login/invalid')
 
-	#myTallers = fw_db.getMyTallers(db, uid)
-	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data, 'inscrit': False} for t in fw_db.getTallers(db)]
+	inscripcions = fw_db.getInscripcions(db, uid)
+	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data, 'inscrit': t.tid in inscripcions} for t in fw_db.getTallers(db)]
 	
 	return render_template('apuntador/apuntat.html', tallers=tallers)
 
@@ -92,7 +99,14 @@ def logout(success=False):
 	session['user_id'] = None
 	return redirect('/logout/success')
 
-@fw_subs_blueprint.route('/signup/<email>')
+@fw_subs_blueprint.route('/signup', methods=['GET', 'POST'])
+@fw_subs_blueprint.route('/signup/<email>', methods=['GET', 'POST'])
 @database_connect
-def signup(db, email):
-	return "signup %s" % (email,)
+def signup(db, email=""):
+
+	if request.method == "POST":
+		email = request.form.get("email")
+		passwd = request.form.get("passwd")
+		return render_template('apuntador/signup.html', success=True)
+
+	return render_template('apuntador/signup.html', email=email)

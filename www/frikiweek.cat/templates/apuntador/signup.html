@@ -1,0 +1,10 @@
+<h1>Registra't</h1>
+{% if success %}
+Comprova la safata d'entrada del teu correu electrònic. T'hem enviat un email perquè confirmis el teu correu
+{% else %}
+<form action="/signup" method="POST">
+	<input name="email" placeholder="email" type="text" {% if email %}value="{{ email }}"{% endif %} />
+	{% if email %}<input name="passwd" placeholder="passwd" type="password" />{% endif %}
+	<input type="submit" value="Endavant!" />
+</form>
+{% endif %}

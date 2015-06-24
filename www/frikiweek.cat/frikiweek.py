@@ -21,7 +21,7 @@ def redirection():
 
 @app.route('/github')
 def github():
-        return redirect("http://github.com/masipcat/frikiweek.cat")
+	return redirect("http://github.com/masipcat/frikiweek.cat")
 
 @app.route('/beta')
 def beta():
