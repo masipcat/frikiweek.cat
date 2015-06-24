@@ -9,6 +9,7 @@ from utiles import *
 import json, datetime
 
 app = Flask(__name__)
+app.register_blueprint(fw_subs_blueprint)
 
 SESSION_TYPE = 'redis'
 app.config.from_object(__name__)

@@ -1,0 +1,6 @@
+<form action="/tallers/actualitza">
+{% for t in tallers %}
+	<div><input type="checkbox" name="taller_{{ t.id }}" value="1">{{ t.nom }}</div>
+{% endfor %}
+	<input type="submit" name="Actualitza" />
+</form>
