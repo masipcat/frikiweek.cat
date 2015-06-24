@@ -76,7 +76,7 @@ class Usuaris(object):
 		"""
 		Aquest mètode guarda informació de usuari a la taula usuaris 
 		"""
-		self.cursor.execute("INSERT INTO usuaris (contrasenya, nom, correu, dataRegistre) VALUES(?, ?, ?, ?)", (self.contrasenya, self.nom, self.correu, self.dataRegistre))
+		self.cursor.execute("INSERT INTO usuaris (contrasenya, nom, correu, dataRegistre) VALUES(%s, %s, %s, %s)", (self.contrasenya, self.nom, self.correu, self.dataRegistre))
 
 
 def getTallers(db):
@@ -117,9 +117,9 @@ def getInscripcions(db, id_usuari):
 	"""
 	l = []
 	cursor = getCursor(db)
-	cursor.execute("SELECT id_taller FROM inscripcio WHERE id_usuari = ? AND data LIKE '%?'", (id_usuari, datetime.datetime.now().strftime('%Y')))
+	cursor.execute("SELECT id_taller FROM inscripcio WHERE id_usuari = %s AND Year(data) = Year(%s)", (id_usuari, datetime.datetime.now().strftime('%Y-%m-%d')))
 	for row in cursor:
-		l.append(row)
+		l.append(row[0])
 	return l
 
 
@@ -141,5 +141,12 @@ class Inscripcio(object):
 		"""
 		Aquest mètode guarda inscripció a la taula inscripcio 
 		"""
-		self.cursor.execute("INSERT INTO inscripcio VALUES(?, ?, ?)", (self.id_taller, self.id_usuari, self.data))
+		self.cursor.execute("INSERT INTO inscripcio VALUES(%s, %s, %s)", (self.id_taller, self.id_usuari, self.data))
+
+# test
+
+db = db_connect()
+i = Inscripcio(db, 2, 2)
+i.save()
+db.commit()
 

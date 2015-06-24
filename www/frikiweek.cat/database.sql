@@ -17,5 +17,6 @@ CREATE TABLE IF NOT EXISTS usuaris (
 CREATE TABLE IF NOT EXISTS inscripcio (
 	id_usuari INTEGER REFERENCES usuaris(id),
 	id_taller INTEGER REFERENCES taller(id),
-	data DATETIME
+	data DATETIME,
+	PRIMARY KEY(id_usuari, id_taller)
 );
