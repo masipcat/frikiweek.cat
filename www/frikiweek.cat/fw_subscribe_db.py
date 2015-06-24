@@ -123,6 +123,18 @@ def getInscripcions(db, id_usuari):
 	return l
 
 
+def update_inscripcions(db, id_usuari, llista_tallers):
+
+        """
+        Aquesta funció actulitza inscripcions de id_usuari
+        """
+        cursor = getCursor(db)
+	cursor.execute("DELETE FROM inscripcio WHERE id_usuari = %s AND Year(data) = Year(%s)", (id_usuari, datetime.datetime.now().strftime('%Y-%m-%d')))
+        data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        for x in llista_tallers:
+                cursor.execute("INSERT INTO inscripcio VALUES(%s, %s, %s)", (id_usuari, x, data))
+        
+
 class Inscripcio(object):
 
 	"""
@@ -147,7 +159,6 @@ class Inscripcio(object):
 # test
 
 db = db_connect()
-i = Inscripcio(db, 2, 2)
-i.save()
+update_inscripcions(db, 2, [3, 4, 6])
 db.commit()
 """
