@@ -4,3 +4,5 @@
 Thumbs.db
 
 *.fw.png
+
+db_constants.py

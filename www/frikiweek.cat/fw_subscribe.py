@@ -45,7 +45,7 @@ def login(db, extra=""):
 		return redirect('/tallers')
 
 	if extra == "invalid":
-		return render_template("apuntador/login.html", error=True)
+		return render_template("apuntador/login.html", error="Usuari o contrassenya incorrectes")
 	elif extra != "":
 		return render_template("apuntador/login.html", email=extra)
 	else:
@@ -77,18 +77,27 @@ def check_login(db):
 	session.pop('user_id', None)
 	return redirect('/login/invalid')
 
-@fw_subs_blueprint.route('/tallers')
+@fw_subs_blueprint.route('/tallers', methods=['GET', 'POST'])
+@fw_subs_blueprint.route('/tallers/<name>')
 @database_connect
-def apuntat(db):
+def apuntat(db, name=None):
 	uid = session['user_id']
 
 	if not uid:
 		return redirect('/login/invalid')
 
+	if request.method == 'POST':
+		f = request.form
+		tallers = []
+		for key in f.keys():
+			if key == 'each_taller':
+				fw_db.update_inscripcions(db, uid, f.getlist(key))
+				return redirect('/tallers/actualitzat')
+
 	inscripcions = fw_db.getInscripcions(db, uid)
 	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data, 'inscrit': t.tid in inscripcions} for t in fw_db.getTallers(db)]
-	
-	return render_template('apuntador/apuntat.html', tallers=tallers)
+
+	return render_template('apuntador/apuntat.html', tallers=tallers, success=name == "actualitzat")
 
 @fw_subs_blueprint.route('/logout')
 @fw_subs_blueprint.route('/logout/<success>')
