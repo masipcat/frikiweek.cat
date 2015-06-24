@@ -86,7 +86,7 @@ def getTallers(db):
 	"""
 	l = []
 	cursor = getCursor(db)
-	cursor.execute("SELECT * FROM taller WHERE data LIKE '?%'", (datetime.datetime.now().strftime('%Y'), ))
+	cursor.execute("SELECT * FROM taller WHERE Year(data) = Year(%s)", (datetime.datetime.now().strftime('%Y-%m-%d'), ))
 
 	for row in cursor:
 		tid, nom, descripcio, data, duracio = row
