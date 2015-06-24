@@ -40,17 +40,25 @@ def check_login(db):
 	email = request.form.get('email')
 	passwd = request.form.get('passwd')
 	
-	if email and passwd:
-		uid = login(db, email, passwd)
+	if not email:
+		return redirect('/login/invalid')
 		
-		if uid == ERR_USER_NOT_FOUND or uid == ERR_USER_INVALID_LOGIN:
-			session['user_id'] = None
-			return redirect('/login/invalid')
-		
-		session['user_id'] = uid
-		return redirect('/apuntat')
+	exist = user_exist(email)
 
-	return redirect('/login/invalid')
+	if not exist:
+		return redirect('/signup/%s' % email)
+
+	if not passwd:
+		return redirect('/login/invalid')
+
+	uid = login(db, email, passwd)
+	
+	if uid == ERR_USER_INVALID_LOGIN:
+		session['user_id'] = None
+		return redirect('/login/invalid')
+	
+	session['user_id'] = uid
+	return redirect('/tallers')
 
 @fw_subs_blueprint.route('/tallers')
 @database_connect
