@@ -27,38 +27,30 @@ from constants import *
 	- data
 """
 
-def db_connect():
+def database_connect():
 	db = MySQLdb.connect(host=DB_SERVER, user=DB_USER, passwd=DB_PASSWD, db=DB_NAME)
 	db.set_character_set('utf8')
-	return db
-
-def getCursor(db):
-	dbc = db.cursor()
 	dbc.execute('SET NAMES utf8;')
 	dbc.execute('SET CHARACTER SET utf8;')
 	dbc.execute('SET character_set_connection=utf8;')
-	return dbc #db.cursor(MySQLdb.cursors.DictCursor)
+	return db
 
-def user_exist(db, correu):
+def getCursor(db):
+	return db.cursor(MySQLdb.cursors.DictCursor)
 
-        """
-        """
-        cursor = getCursor(db)
-	cursor.execute("SELECT correu FROM usuaris WHERE correu = ?", (correu, ))
-        return cursor.row_count > 0
-        
 
 def login(db, correu, contransenya):
         
         """
         Aquesta funció donada BD, correu i contrasenya retorn id de usuari si la contrasenya es correcte, sinó ERR_USER_INVALID_LOGIN
         """
-	cursor = getCursor(db)
-	cursor.execute("SELECT id, contrasenya FROM usuaris WHERE correu = ?", (correu, ))
+	cursor = db.cursor()
+	cursor.execute("SELECT id, contrasenya FROM usuaris WHERE data correu = ?", (correu, ))
         uid, contra = cursor.fetchone()
         if contrasenya == utiles.sha1(cursor.fetchone()):
                 return (SUCCESS, uid)
         return (ERR_USER_INVALID_LOGIN, None)
+
 
 class Usuaris(object):
 
@@ -72,7 +64,7 @@ class Usuaris(object):
 		self.nom = nom
 		self.correu = correu
 		self.dataRegistre = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-		self.cursor = getCursor(db)
+		self.cursor = db.cursor()
 
 	def save(self):
 		
@@ -88,7 +80,7 @@ def getTallers(db):
 	Aquesta funció donada BD retorna una llista de Taller's
 	"""
 	l = []
-	cursor = getCursor(db)
+	cursor = db.cursor()
 	cursor.execute("SELECT * FROM taller WHERE data LIKE '?%'", (datetime.datetime.now().strftime('%Y'), ))
 
 	for row in cursor:
@@ -119,7 +111,7 @@ def getInscripcions(db, id_usuari):
 	Aquesta funció donada BD i id_usuari retorna una llista de id's de taller
 	"""
 	l = []
-	cursor = getCursor(db)
+	cursor = db.cursor()
 	cursor.execute("SELECT id_taller FROM inscripcio WHERE id_usuari = ? AND data LIKE '%?'", (id_usuari, datetime.datetime.now().strftime('%Y')))
 	for row in cursor:
 		l.append(row)
@@ -137,7 +129,7 @@ class Inscripcio(object):
 		self.id_taller = id_taller
 		self.id_usuari = id_usuari
 		self.data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-		self.cursor = getCursor(db)
+		self.cursor = db.cursor()
 
 	def save(self):
 

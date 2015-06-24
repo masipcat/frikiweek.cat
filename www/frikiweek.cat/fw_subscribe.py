@@ -43,10 +43,10 @@ def check_login(db):
 	if not email:
 		return redirect('/login/invalid')
 		
-	exist = user_exist(email)
+	exist = user_exist(db, email)
 
 	if not exist:
-		return redirect('/signup/%s' % email)
+		return redirect('/signup/jordi@masip.cat')
 
 	if not passwd:
 		return redirect('/login/invalid')
@@ -82,4 +82,4 @@ def logout(success=False):
 @fw_subs_blueprint.route('/signup/<email>')
 @database_connect
 def signup(db, email):
-	return "db %s, signup %s" % (db, email)
+	return "signup %s" % (email,)
