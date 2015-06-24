@@ -143,10 +143,11 @@ class Inscripcio(object):
 		"""
 		self.cursor.execute("INSERT INTO inscripcio VALUES(%s, %s, %s)", (self.id_taller, self.id_usuari, self.data))
 
+"""
 # test
 
 db = db_connect()
 i = Inscripcio(db, 2, 2)
 i.save()
 db.commit()
-
+"""
