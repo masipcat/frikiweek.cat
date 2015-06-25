@@ -3,13 +3,14 @@
 {% block content %}
 <h1>Registra't</h1>
 {% if success %}
-Comprova la safata d'entrada del teu correu electrònic. T'hem enviat un email perquè confirmis la teva adreça electrònica. (mira a l'spam)
+	Comprova la safata d'entrada del teu correu electrònic. T'hem enviat un email perquè confirmis la teva adreça electrònica. (mira a l'spam)
 {% else %}
-<form action="/signup" method="POST">
-	<input name="name" placeholder="Nom" type="text" /><br>
-	<input name="email" placeholder="Email" type="text" {% if email %}value="{{ email }}"{% endif %} /><br>
-	{% if email %}<input name="passwd" placeholder="Contrasenya" type="password" /><br>{% endif %}
-	<input type="submit" value="Endavant!" />
-</form>
+	{% if email %}Hi ha hagut un error en envia l'email{% endif %}
+	<form action="/signup" method="POST">
+		<input name="name" placeholder="Nom" type="text" /><br>
+		<input name="email" placeholder="Email" type="text" {% if email %}value="{{ email }}"{% endif %} /><br>
+		<input name="passwd" placeholder="Contrasenya" type="password" /><br>
+		<input type="submit" value="Endavant!" />
+	</form>
 {% endif %}
 {% endblock %}

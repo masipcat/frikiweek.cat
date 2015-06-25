@@ -75,6 +75,20 @@ def getUsuari(db, uid):
 	u = Usuari(db, r[1], r[2], r[3])
 	u.dataRegistre = r[4]
 	u.uid = r[0]
+	u.confirmacio = r[5]
+	return u
+
+def getUsuariPerEmail(db, email):
+	cursor = getCursor(db)
+	cursor.execute("SELECT * FROM usuaris WHERE correu = %s", email)
+	r = cursor.fetchone()
+	if not r:
+		return None
+
+	u = Usuari(db, r[1], r[2], r[3])
+	u.dataRegistre = r[4]
+	u.uid = r[0]
+	u.confirmacio = r[5]
 	return u
 
 class Usuari(object):

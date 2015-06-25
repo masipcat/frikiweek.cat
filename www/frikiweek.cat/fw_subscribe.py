@@ -130,11 +130,24 @@ def signup(db, email=""):
 		print name, email, passwd
 
 		if name and email and passwd:
-			confirmation = fw_db.Usuari(db, passwd, name, email).save()
-			sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=confirmation, _external=True))
-			return render_template('apuntador/signup.html', success=True)
-		else:
-			return render_template('apuntador/signup.html', success=False)
+			usuari = fw_db.getUsuariPerEmail(db, email)
+
+			if usuari:
+				return render_template('apuntador/signup.html', success=False)
+
+			usuari = fw_db.Usuari(db, passwd, name, email)
+			r = sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=usuari.confirmacio, _external=True))
+
+			if r != None:
+				status_code = r.status_code
+
+			print "Status code:", status_code
+
+			if status_code == 200:
+				usuari.save()
+				return render_template('apuntador/signup.html', success=True)
+		
+		return render_template('apuntador/signup.html', email=email, success=False)
 
 	return render_template('apuntador/signup.html', email=email)
 
