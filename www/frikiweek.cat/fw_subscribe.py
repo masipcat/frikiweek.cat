@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template, make_response, redirect, request, session
+from flask import Blueprint, render_template, make_response, redirect, request, session, url_for
 import fw_subscribe_db as fw_db
+import send_mail as sm
 from utiles import *
 from constants import *
 
@@ -74,7 +75,7 @@ def check_login(db):
 		session['user_id'] = uid
 		return redirect('/tallers')
 
-	session.pop('user_id', None)
+	session['user_id'] = None
 	return redirect('/login/invalid')
 
 @fw_subs_blueprint.route('/tallers', methods=['GET', 'POST'])
@@ -112,10 +113,24 @@ def logout(success=False):
 @fw_subs_blueprint.route('/signup/<email>', methods=['GET', 'POST'])
 @database_connect
 def signup(db, email=""):
-
 	if request.method == "POST":
+		name = request.form.get("name")
 		email = request.form.get("email")
 		passwd = request.form.get("passwd")
-		return render_template('apuntador/signup.html', success=True)
+
+		if name and email and passwd:
+			confirmation = fw_db.Usuari(db, passwd, nom, email).save()
+			sm.send_confirmation_mail(email, name, url_for('/signup/validate/') + confirmation)
+			return render_template('apuntador/signup.html', success=True)
+		else:
+			return render_template('apuntador/signup.html', success=False)
 
 	return render_template('apuntador/signup.html', email=email)
+
+@fw_subs_blueprint.route('/signup/validate/<confirmation>')
+@database_connect
+def signup_validated(db, confirmation=None):
+	if confirmation and fw_db.confirma(db, confirmation):
+		return redirect('/login')
+
+	return render_template('apuntador/signup_validated.html')

@@ -50,10 +50,10 @@ def login(db, correu, contrasenya):
 	"""
 	cursor = getCursor(db)
 	cursor.execute("SELECT id FROM usuaris WHERE correu=%s AND contrasenya=%s", (correu, utiles.sha1(contrasenya)))
-	uid = cursor.fetchone()[0]
+	uid = cursor.fetchone()
 	
 	if uid:
-		return (SUCCESS, uid)
+		return (SUCCESS, uid[0])
 
 	return (ERR_USER_INVALID_LOGIN, None)
 
