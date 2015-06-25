@@ -10,8 +10,9 @@ CREATE TABLE IF NOT EXISTS usuaris (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	contrasenya VARCHAR(40),
 	nom VARCHAR(10),
-	correu VARCHAR(30),
-	dataRegistre DATETIME
+	correu VARCHAR(30) UNIQUE,
+	dataRegistre DATETIME,
+	confirmacio VARCHAR(40)
 );
 
 CREATE TABLE IF NOT EXISTS inscripcio (

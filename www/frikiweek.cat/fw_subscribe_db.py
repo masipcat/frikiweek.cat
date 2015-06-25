@@ -98,7 +98,7 @@ def getTallers(db):
 	"""
 	l = []
 	cursor = getCursor(db)
-	cursor.execute("SELECT * FROM taller WHERE Year(data) = Year(%s)", (datetime.datetime.now().strftime('%Y-%m-%d'), ))
+	cursor.execute("SELECT * FROM taller WHERE Year(data) = Year(%s) ORDER BY data", (datetime.datetime.now().strftime('%Y-%m-%d'), ))
 
 	for row in cursor:
 		tid, nom, descripcio, data, duracio = row
@@ -171,6 +171,5 @@ class Inscripcio(object):
 # test
 
 db = db_connect()
-confirma(db, '123')
-db.commit()
+getTallers(db)
 """
