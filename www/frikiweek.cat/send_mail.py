@@ -10,7 +10,9 @@ from db_constants import *
 def send_confirmation_mail(to, nom, confirm_url):
 	txt = """Hola {0},<br/><br/>
 	Gràcies per registrar-te! Ara només has de clicar el següent enllaç:<br/><br/>
-	<a href='{1}'>Confirmació</a><br/><br/>T'esperem la setmana del 29!""".format(nom, confirm_url)
+	<a href='{1}'>Confirmació</a><br/><br/>
+	T'esperem la setmana del 29!<br/><br/>
+	<em>Si tens qualsevol dubte, pots escriure'ns a info@frikiweek.cat</em>""".format(nom, confirm_url)
 	
 	return send_mailgun(to, "Confirmació de l'adreça electrònica", txt)
 
