@@ -113,7 +113,7 @@ def apuntat(db, name=None):
 @fw_subs_blueprint.route('/logout/<success>')
 def logout(success=False):
 	if success == 'success':
-		return "S'ha tancat la sessió correctament"
+		return render_template('apuntador/logout.html')
 
 	session['user_id'] = None
 	return redirect('/logout/success')

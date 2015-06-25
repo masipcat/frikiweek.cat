@@ -5,8 +5,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="google-site-verification" content="2JIx_A4UTRNYWm76Ux3KqW2OGW8Ee726BcX8YUp5Vd4" />
 	<meta name="description" content="La FW és una iniciativa nascuda dels estudiants de l'Enginyeria de Sistemes TIC. Té com a objectiu intercanviar coneixements, entre estudiants i interessats">
+	<meta name="keywords" content="frikiweek,ubuntu,python,php,introduccio,estudiants,expressions regulars,regex,epsem,itic,enginyeria,sistemes tic,tic,itc">
+	<meta name="author" content="Qiwei Ni,Jordi Masip,Joan Martínez" />
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=1;">
-	
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -55,29 +56,39 @@
 	{% endfor %}
 	</main>
 	<div class="form">
+	{% if use_mailchimp %}
 		<form action="//frikiweek.us11.list-manage.com/subscribe/post?u=7fa5e5c14258dc6bff5457317&amp;id=7c8ce21dc0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" class="form">
 			<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Correu electrònic">
 			<input type="submit" value="Subscriu-te" name="subscribe" id="mc-embedded-subscribe" class="button">
+	{% else %}
+		<form action="/check_login" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" class="form">
+			<input type="email" value="" name="email" class="email" id="mce-EMAIL" placeholder="Correu electrònic">
+			<input type="submit" value="Inscriu-te" name="subscribe" id="mc-embedded-subscribe" class="button">
+	{% endif %}
 		</form>
 	</div>
 	<footer>
 		2015, Estudiants de TIC · Universitat Politècnica de Catalunya<br />
 		Troban's a <a href="http://facebook.com/FrikiWeek" target="_blank">facebook</a> · <a href="http://twitter.com/frikiweek" target="_blank">twitter</a> · <a href="http://github.com/masipcat/frikiweek.cat" target="_blank">GitHub</a><br />
-		<small>Amb el suport de</small><div class="frame"><span class="helper"></span><img class="logo_suport" src="{{ url_for('static', filename='images/itic-logo.jpg') }}" alt="Logotip d'itic.cat" /> <span class="helper"></span><img class="logo_suport" src="{{ url_for('static', filename='images/fundacio.cat.jpg') }}" alt="Fundació .CAT" /></div>
+		<small>Amb el suport de</small>
+		<div class="frame">
+			<a href="http://itic.cat" target="_blank"><span class="helper"></span><img class="logo_suport" src="{{ url_for('static', filename='images/itic-logo.jpg') }}" alt="Logotip d'itic.cat" /></a> 
+			<a href="http://fundacio.cat" target="_blank"><span class="helper"></span><img class="logo_suport" src="{{ url_for('static', filename='images/fundacio.cat.jpg') }}" alt="Fundació .CAT" /></a>
+		</div>
 	</footer>
 </div>
 <script>
-	function menu() {
-		var menu = document.getElementById("navlist_m");
-		if (menu.style.display == "block")
-			menu.style.display = "none";
-		else
-			menu.style.display = "block";
-	}
+function menu() {
+	var menu = document.getElementById("navlist_m");
+	if (menu.style.display == "block")
+		menu.style.display = "none";
+	else
+		menu.style.display = "block";
+}
 
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-63919703-1', 'auto');
-	ga('send', 'pageview');
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-63919703-1', 'auto');
+ga('send', 'pageview');
 </script>
 </body>
 </html>

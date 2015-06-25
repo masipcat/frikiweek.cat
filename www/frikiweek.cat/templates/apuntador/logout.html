@@ -1,0 +1,10 @@
+{% extends "apuntador/base.html" %}
+{% block title %}Logout{% endblock %}
+{% block content %}
+
+<p style="color:#0A0">S'ha tancat la sessió correctament</p>
+<p><small>D'aquí a 2s tornaràs a la pàgina principal...</small></p>
+<script type="text/javascript">
+	setTimeout(function() {window.location.pathname = '/'}, 2500);
+</script>
+{% endblock %}
