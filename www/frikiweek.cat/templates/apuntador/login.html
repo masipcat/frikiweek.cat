@@ -1,3 +1,6 @@
+{% extends "apuntador/base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
 <h1>Benvingut a l'*apuntador d'activitats de la FW'15</h1>
 
 {% if error %}<p style="color:#A00">{{ error }}</p>{% endif %}
@@ -7,3 +10,4 @@
 	{% if email %}<input name="passwd" placeholder="passwd" type="password" />{% endif %}
 	<input type="submit" value="Endavant!" />
 </form>
+{% endblock %}
