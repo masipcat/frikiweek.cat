@@ -282,3 +282,45 @@ MOBILE
 		display: block;
 	}
 }
+
+/* Apuntador */
+#content {
+	margin: 5% 5% 0 5%;
+}
+
+#content p {
+	line-height: 10px;
+}
+
+#content input[type = "text"], input[type = "password"] {
+	border:1px solid #999; 
+	-webkit-appearance:none;
+	font-size: 16px;
+	padding:8px 3px; 
+	text-indent:2%;
+	float: center;	
+	margin-bottom: 20px;
+	border-radius: 2px;
+	display: block;
+	width: 90%;
+	max-width: 500px;
+}
+
+#content input[type = "submit"] {
+	background-color: #666; 
+	border: 0 none;
+	color: rgba(255,255,255,1); 
+	cursor: pointer; 
+	font-size: 16px; 
+	font-weight: normal; 
+	height: 36px; 
+	line-height: 36px; 
+	margin: 0 0 0 0px; 
+	padding: 0 22px; 
+	text-align: center; 
+	text-decoration: none; 
+	vertical-align: top; 
+	white-space: nowrap;
+	border-radius: 2px;
+	display: block;
+}
