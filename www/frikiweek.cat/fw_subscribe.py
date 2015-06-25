@@ -5,7 +5,6 @@ from flask import Blueprint, render_template, make_response, redirect, request, 
 import fw_subscribe_db as fw_db
 import send_mail as sm
 from utiles import *
-from constants import *
 
 fw_subs_blueprint = Blueprint('fw_subs_blueprint', __name__, template_folder='templates')
 
@@ -100,6 +99,7 @@ def apuntat(db, name=None):
 				fw_db.update_inscripcions(db, uid, f.getlist(key))
 				return redirect('/tallers/actualitzat')
 
+	user = fw_db.getUsuari(db, uid)
 	inscripcions = fw_db.getInscripcions(db, uid)
 	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data.strftime("%d/%m a les %H:%M"), 'inscrit': t.tid in inscripcions} for t in fw_db.getTallers(db)]
 
@@ -107,7 +107,7 @@ def apuntat(db, name=None):
 		for k in t.keys():
 			unicode(str(t[k]), 'utf-8')"""
 
-	return render_template('apuntador/apuntat.html', tallers=tallers, success=name == "actualitzat")
+	return render_template('apuntador/apuntat.html', name=user.nom, tallers=tallers, success=name == "actualitzat")
 
 @fw_subs_blueprint.route('/logout')
 @fw_subs_blueprint.route('/logout/<success>')

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS taller (
 CREATE TABLE IF NOT EXISTS usuaris (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	contrasenya VARCHAR(40),
-	nom VARCHAR(10),
+	nom VARCHAR(40),
 	correu VARCHAR(30) UNIQUE,
 	dataRegistre DATETIME,
 	confirmacio VARCHAR(40)

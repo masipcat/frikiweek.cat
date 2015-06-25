@@ -58,13 +58,24 @@ def login(db, correu, contrasenya):
 	return (ERR_USER_INVALID_LOGIN, None)
 
 def confirma(db, codi):
-        
-        """
-        Aquesta funció actulitza el camp de usuari que té la confirmació codi a NULL
-        """
-        cursor = getCursor(db)
-        return cursor.execute("UPDATE usuaris SET confirmacio = NULL WHERE confirmacio = %s", (codi)) > 0
-        
+    
+    """
+    Aquesta funció actulitza el camp de usuari que té la confirmació codi a NULL
+    """
+    cursor = getCursor(db)
+    return cursor.execute("UPDATE usuaris SET confirmacio = NULL WHERE confirmacio = %s", (codi)) > 0
+
+def getUsuari(db, uid):
+	cursor = getCursor(db)
+	cursor.execute("SELECT * FROM usuaris WHERE id = %s", str(uid))
+	r = cursor.fetchone()
+	if not r:
+		return None
+
+	u = Usuari(db, r[1], r[2], r[3])
+	u.dataRegistre = r[4]
+	u.uid = r[0]
+	return u
 
 class Usuari(object):
 
@@ -73,7 +84,7 @@ class Usuari(object):
 	"""
 	
 	def __init__(self, db, contrasenya, nom, correu):
-
+		self.uid = None
 		self.contrasenya = utiles.sha1('friki' + contrasenya)
 		self.nom = nom
 		self.correu = correu.lower()

@@ -14,6 +14,11 @@ sys.setdefaultencoding('utf-8')
 app = Flask(__name__)
 app.register_blueprint(fw_subs_blueprint)
 
+if app.debug:
+	DB_SERVER = "d2.frikiweek.cat"
+else:
+	DB_SERVER = "10.131.153.116"
+
 SESSION_TYPE = 'redis'
 app.config.from_object(__name__)
 Session(app)
