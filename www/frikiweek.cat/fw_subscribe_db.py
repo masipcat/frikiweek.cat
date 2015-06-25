@@ -49,13 +49,21 @@ def login(db, correu, contrasenya):
 	Aquesta funció donada BD, correu i contrasenya retorn id de usuari si la contrasenya es correcte, sinó ERR_USER_INVALID_LOGIN
 	"""
 	cursor = getCursor(db)
-	cursor.execute("SELECT id FROM usuaris WHERE correu=%s AND contrasenya=%s", (correu, utiles.sha1(contrasenya)))
-	uid = cursor.fetchone()[0]
+	cursor.execute("SELECT id FROM usuaris WHERE correu=%s AND contrasenya=%s", (correu, utiles.sha1('friki' + contrasenya)))
+	uid = cursor.fetchone()
 	
 	if uid:
-		return (SUCCESS, uid)
+		return (SUCCESS, uid[0])
 
 	return (ERR_USER_INVALID_LOGIN, None)
+
+def confirma(db, codi):
+        
+        """
+        Aquesta funció actulitza el camp de usuari que té la confirmació codi a NULL
+        """
+        self.cursor.execute("UPDATE usuaris SET confirmacio = NULL WHERE confirmacio = %s", (codi))
+
 
 class Usuaris(object):
 
@@ -65,10 +73,12 @@ class Usuaris(object):
 	
 	def __init__(self, db, contrasenya, nom, correu):
 
-		self.contrasenya = utiles.sha1(contrasenya)
+		self.contrasenya = utiles.sha1('friki' + contrasenya)
 		self.nom = nom
 		self.correu = correu
-		self.dataRegistre = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+		self.dataRegistre = data
+                self.confirmacio = utiles.sha1(data + correu)
 		self.cursor = getCursor(db)
 
 	def save(self):
@@ -76,7 +86,8 @@ class Usuaris(object):
 		"""
 		Aquest mètode guarda informació de usuari a la taula usuaris 
 		"""
-		self.cursor.execute("INSERT INTO usuaris (contrasenya, nom, correu, dataRegistre) VALUES(%s, %s, %s, %s)", (self.contrasenya, self.nom, self.correu, self.dataRegistre))
+		self.cursor.execute("INSERT INTO usuaris (contrasenya, nom, correu, dataRegistre, confirmacio) VALUES(%s, %s, %s, %s, %s)", (self.contrasenya, self.nom, self.correu, self.dataRegistre, self.confirmacio))
+                return self.confirmacio
 
 
 def getTallers(db):
