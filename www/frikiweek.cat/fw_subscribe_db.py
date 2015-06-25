@@ -66,7 +66,7 @@ def confirma(db, codi):
         return cursor.execute("UPDATE usuaris SET confirmacio = NULL WHERE confirmacio = %s", (codi)) > 0
         
 
-class Usuaris(object):
+class Usuari(object):
 
 	"""
 	Aquest classe representa usuari
@@ -76,10 +76,10 @@ class Usuaris(object):
 
 		self.contrasenya = utiles.sha1('friki' + contrasenya)
 		self.nom = nom
-		self.correu = correu
-                data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+		self.correu = correu.lower()
+		data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 		self.dataRegistre = data
-                self.confirmacio = utiles.sha1(data + correu)
+		self.confirmacio = utiles.sha1(data + correu)
 		self.cursor = getCursor(db)
 
 	def save(self):

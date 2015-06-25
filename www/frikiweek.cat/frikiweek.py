@@ -6,7 +6,10 @@ from flask.ext.session import Session
 from fw_subscribe import fw_subs_blueprint
 from werkzeug import secure_filename
 from utiles import *
-import json, datetime
+import json, datetime, sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 app.register_blueprint(fw_subs_blueprint)

@@ -5,11 +5,12 @@ import smtplib
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from db_constants import *
 
 def send_confirmation_mail(to, nom, confirm_url):
 	txt = """Hola {0},<br/><br/>
 	Gràcies per registrar-te! Ara només has de clicar el següent enllaç:<br/><br/>
-	<center><a href='{1}'>Confirmació</a></center><br/><br/>T'esperem!""".format(nom, confirm_url)
+	<a href='{1}'>Confirmació</a><br/><br/>T'esperem la setmana del 29!""".format(nom, confirm_url)
 	
 	return send_mail(to, "Confirmació de l'adreça electrònica", txt)
 
@@ -46,7 +47,8 @@ def send_mail(to, subject, text):
 
 	# Send the message via local SMTP server.
 	s = smtplib.SMTP(server)
+	s.login(me, 'QiweiBonica')
 	# sendmail function takes 3 arguments: sender's address, recipient's address
 	# and message to send - here it is sent as one string.
-	s.sendmail(me, to, msg.as_string())
+	s.sendmail(to, me, msg.as_string())
 	s.quit()

@@ -39,8 +39,10 @@ def database_connect(func):
 @fw_subs_blueprint.route('/login/<extra>')
 @database_connect
 def login(db, extra=""):
-
-	uid = session['user_id']
+	try:
+		uid = session['user_id']
+	except KeyError:
+		uid = None
 
 	if uid:
 		return redirect('/tallers')
@@ -82,7 +84,10 @@ def check_login(db):
 @fw_subs_blueprint.route('/tallers/<name>')
 @database_connect
 def apuntat(db, name=None):
-	uid = session['user_id']
+	try:
+		uid = session['user_id']
+	except KeyError:
+		uid = None
 
 	if not uid:
 		return redirect('/login/invalid')
@@ -96,7 +101,11 @@ def apuntat(db, name=None):
 				return redirect('/tallers/actualitzat')
 
 	inscripcions = fw_db.getInscripcions(db, uid)
-	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data, 'inscrit': t.tid in inscripcions} for t in fw_db.getTallers(db)]
+	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data.strftime("%d/%m a les %H:%M"), 'inscrit': t.tid in inscripcions} for t in fw_db.getTallers(db)]
+
+	"""for t in tallers:
+		for k in t.keys():
+			unicode(str(t[k]), 'utf-8')"""
 
 	return render_template('apuntador/apuntat.html', tallers=tallers, success=name == "actualitzat")
 
@@ -118,9 +127,11 @@ def signup(db, email=""):
 		email = request.form.get("email")
 		passwd = request.form.get("passwd")
 
+		print name, email, passwd
+
 		if name and email and passwd:
-			confirmation = fw_db.Usuari(db, passwd, nom, email).save()
-			sm.send_confirmation_mail(email, name, url_for('/signup/validate/') + confirmation)
+			confirmation = fw_db.Usuari(db, passwd, name, email).save()
+			sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=confirmation, _external=True))
 			return render_template('apuntador/signup.html', success=True)
 		else:
 			return render_template('apuntador/signup.html', success=False)
@@ -129,7 +140,7 @@ def signup(db, email=""):
 
 @fw_subs_blueprint.route('/signup/validate/<confirmation>')
 @database_connect
-def signup_validated(db, confirmation=None):
+def signup_validate(db, confirmation=None):
 	if confirmation and fw_db.confirma(db, confirmation):
 		return redirect('/login')
 
