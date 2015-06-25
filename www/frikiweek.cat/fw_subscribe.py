@@ -133,7 +133,7 @@ def signup(db, email=""):
 			usuari = fw_db.getUsuariPerEmail(db, email)
 
 			if usuari:
-				return render_template('apuntador/signup.html', success=False)
+				return render_template('apuntador/signup.html', error="Aquest usuari ja existeix!")
 
 			usuari = fw_db.Usuari(db, passwd, name, email)
 			r = sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=usuari.confirmacio, _external=True))
@@ -141,13 +141,15 @@ def signup(db, email=""):
 			if r != None:
 				status_code = r.status_code
 
-			print "Status code:", status_code
+			print "Status code send mail:", status_code
 
 			if status_code == 200:
 				usuari.save()
-				return render_template('apuntador/signup.html', success=True)
+				return render_template('apuntador/signup.html', check_inbox=True)
 		
-		return render_template('apuntador/signup.html', email=email, success=False)
+			return render_template('apuntador/signup.html', email=email, error="Hi ha hagut un error en enviar l'email")
+
+		return render_template('apuntador/signup.html', email=email, check_inbox=True)
 
 	return render_template('apuntador/signup.html', email=email)
 

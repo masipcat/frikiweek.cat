@@ -2,10 +2,10 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 <h1>Registra't</h1>
-{% if success %}
+{% if check_inbox %}
 	Comprova la safata d'entrada del teu correu electrònic. T'hem enviat un email perquè confirmis la teva adreça electrònica. (mira a l'spam)
 {% else %}
-	{% if email %}Hi ha hagut un error en envia l'email{% endif %}
+	{% if error %}{{ error }}{% endif %}
 	<form action="/signup" method="POST">
 		<input name="name" placeholder="Nom" type="text" /><br>
 		<input name="email" placeholder="Email" type="text" {% if email %}value="{{ email }}"{% endif %} /><br>
