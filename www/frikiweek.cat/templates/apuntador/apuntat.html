@@ -2,14 +2,14 @@
 {% block title %}Apuntador{% endblock %}
 {% block content %}
 <h1>Llista de tallers</h1>
-
-<p><strong>{{ name }}</strong>, aquí tens la llista de tallers disponibles per incriure't</p>
-
+<p>Hola <strong>{{ name }}</strong>,<br />aquí tens la llista de tallers disponibles per incriure't</p>
 {% if success %}<p style="color:#0A0">Els canvis s'han desat correctament</p>{% endif %}
-
 <form action="/tallers" method="POST">
 {% for t in tallers %}
-	<div style="margin-bottom:7px"><input type="checkbox" name="each_taller" value="{{ t.id }}" {% if t.inscrit %}checked{% endif %}><strong>{{ t.nom }}</strong> - {{ t.data }}</div>
+	<div style="margin-bottom:7px">
+		<input type="checkbox" name="each_taller" value="{{ t.id }}" {% if t.inscrit %}checked{% endif %} />
+		<strong>{{ t.nom }}</strong> - {{ t.data }}
+	</div>
 {% endfor %}
 	<br />
 	<input type="submit" value="Actualitza les subscripcions" />
