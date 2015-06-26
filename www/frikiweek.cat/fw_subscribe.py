@@ -103,10 +103,6 @@ def apuntat(db, name=None):
 	inscripcions = fw_db.getInscripcions(db, uid)
 	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data.strftime("%d/%m a les %H:%M"), 'inscrit': t.tid in inscripcions} for t in fw_db.getTallers(db)]
 
-	"""for t in tallers:
-		for k in t.keys():
-			unicode(str(t[k]), 'utf-8')"""
-
 	return render_template('apuntador/apuntat.html', name=user.nom, tallers=tallers, success=name == "actualitzat")
 
 @fw_subs_blueprint.route('/logout')

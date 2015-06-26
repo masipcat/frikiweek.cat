@@ -1,10 +1,11 @@
 {% extends "apuntador/base.html" %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<h1>Registra't</h1>
 {% if check_inbox %}
-	Comprova la safata d'entrada del teu correu electrònic. T'hem enviat un email perquè confirmis la teva adreça electrònica. (mira a l'spam)
+	<h1>Registrat</h1>
+	Comprova la safata d'entrada del teu correu electrònic. T'hem enviat un email perquè confirmis la teva adreça electrònica.
 {% else %}
+	<h1>Registra't</h1>
 	{% if error %}{{ error }}{% endif %}
 	<form action="/signup" method="POST">
 		<input name="name" placeholder="Nom" type="text" /><br>
