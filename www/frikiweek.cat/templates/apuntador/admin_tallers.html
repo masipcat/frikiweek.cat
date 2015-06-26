@@ -5,8 +5,7 @@
 <h2>Recompte d'inscrits</h2>
 {% for t, count in tallers %}
 <div style="margin-bottom:7px">
-	<input type="checkbox" name="each_taller" value="{{ t.id }}" {% if t.inscrit %}checked{% endif %} />
-	(<strong>{{ count }}</strong> subscrits) - <strong>{{ t.nom }}</strong>
+	(<strong>{{ count }}</strong> inscrits) - <strong>{{ t.nom }}</strong>
 </div>
 {% endfor %}
 {% endblock %}
