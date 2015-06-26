@@ -123,8 +123,6 @@ def signup(db, email=""):
 		email = request.form.get("email")
 		passwd = request.form.get("passwd")
 
-		print name, email, passwd
-
 		if name and email and passwd:
 			usuari = fw_db.getUsuariPerEmail(db, email)
 
@@ -134,10 +132,7 @@ def signup(db, email=""):
 			usuari = fw_db.Usuari(db, passwd, name, email)
 			r = sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=usuari.confirmacio, _external=True))
 
-			if r != None:
-				status_code = r.status_code
-
-			print "Status code send mail:", status_code
+			status_code = r.status_code if r != None else -1
 
 			if status_code == 200:
 				usuari.save()
@@ -156,3 +151,8 @@ def signup_validate(db, confirmation=None):
 		return redirect('/login')
 
 	return render_template('apuntador/signup_validated.html')
+
+@fw_subs_blueprint.route('/admin/tallers')
+@database_connect
+def admin_tallers(db):
+	return render_template('apuntador/admin_tallers.html', tallers=fw_db.tallers_count(db))
