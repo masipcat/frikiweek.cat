@@ -3,10 +3,10 @@
 {% block content %}
 <h1>Llista de tallers</h1>
 <h2>Recompte d'inscrits</h2>
-{% for count, t in tallers %}
+{% for t, count in tallers %}
 <div style="margin-bottom:7px">
 	<input type="checkbox" name="each_taller" value="{{ t.id }}" {% if t.inscrit %}checked{% endif %} />
-	<strong>{{ t.nom }}</strong> (<strong>{{ count }}</strong> subscrits) - {{ t.data }}
+	(<strong>{{ count }}</strong> subscrits) - <strong>{{ t.nom }}</strong>
 </div>
 {% endfor %}
 {% endblock %}
