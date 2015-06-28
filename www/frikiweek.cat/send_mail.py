@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import smtplib, requests
-
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from db_constants import *
 
 def send_confirmation_mail(to, nom, confirm_url):
@@ -17,6 +13,10 @@ def send_confirmation_mail(to, nom, confirm_url):
 	return send_mailgun(to, "Confirmació de l'adreça electrònica", txt)
 
 def send_mail(to, subject, text):
+	import smtplib
+	from email.mime.multipart import MIMEMultipart
+	from email.mime.text import MIMEText
+
 	server = "smtp.frikiweek.cat:587"
 	from_address = "info@frikiweek.cat"
 
@@ -59,6 +59,8 @@ def send_mail(to, subject, text):
 	s.quit()
 
 def send_mailgun(to, subject, text):
+	import requests
+
 	fw = False
 
 	if not fw:

@@ -3,7 +3,10 @@
 {% block content %}
 {% if check_inbox %}
 	<h1>Registrat</h1>
-	Comprova la safata d'entrada del teu correu electrònic. T'hem enviat un email perquè confirmis la teva adreça electrònica.
+	<p>T'hem enviat un email perquè confirmis la teva adreça electrònica. Comprova la safata d'entrada del teu correu electrònic.</p>
+	{% if advert %}
+	<p><strong>Si d'aquí a un minut no has rebut el correu, revisa la carpeta de correu brossa</strong></p>
+	{% endif %}
 {% else %}
 	<h1>Registra't</h1>
 	{% if error %}{{ error }}{% endif %}

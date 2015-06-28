@@ -25,7 +25,7 @@ def database_connect(func):
 				db.commit()
 			except Exception as e:
 				db.rollback()
-				return "Alguna cosa no ha anat bé :(<br />Posa't amb contacte amb info[arroba]frikiweek.cat"
+				return "Alguna cosa no ha anat bé :(<br />Posa't amb contacte amb info[arroba]frikiweek.cat<br /><em>(%s)</em>" % e
 			finally:
 				db.close()
 
@@ -132,11 +132,17 @@ def signup(db, email=""):
 			usuari = fw_db.Usuari(db, passwd, name, email)
 			r = sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=usuari.confirmacio, _external=True))
 
+			if r != None:
+				status_code = r.status_code
+			else:
+				status_code = -1
+
 			status_code = r.status_code if r != None else -1
 
 			if status_code == 200:
 				usuari.save()
-				return render_template('apuntador/signup.html', check_inbox=True)
+				advert = "hotmail" in email or "outlook" in email # Mostra l'advertència de comprovar la carpeta d'spam
+				return render_template('apuntador/signup.html', check_inbox=True, advert=advert)
 		
 			return render_template('apuntador/signup.html', email=email, error="Hi ha hagut un error en enviar l'email")
 
