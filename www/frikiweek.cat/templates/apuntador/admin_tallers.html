@@ -3,9 +3,16 @@
 {% block content %}
 <h1>Llista de tallers</h1>
 <h2>Recompte d'inscrits</h2>
+
+{% if msg %}
+	<p style="color:#0A0">{{ msg }}</p>
+{% elif error %}
+	<p style="color:#A00">{{ error }}</p>
+{% endif %}
+
 {% for t, count in tallers %}
 <div style="margin-bottom:7px">
-	(<strong>{{ count }}</strong> inscrits) - <strong>{{ t.nom }}</strong>
+	(<strong>{{ count }}</strong> inscrits) - <strong>{{ t.nom }}</strong> {% if t.id_ponent == my_uid %}[<a href="/admin/send_msg/{{ t.tid }}">envia un missatge</a>]{% endif %}
 </div>
 {% endfor %}
 {% endblock %}

@@ -124,9 +124,7 @@ def getTallerById(db, id_taller):
 	if not r:
 		return None
 
-	t = Taller(db, r[0], r[1], r[2], r[3], r[4], r[5])
-	return t
-
+	return Taller(r[0], r[1], r[2], r[3], r[4], r[5])
 	
 class Taller(object):
 
@@ -143,7 +141,7 @@ class Taller(object):
 		self.duracio = duracio
 		self.id_ponent = id_ponent
 
-	def getInscrits(self):
+	def getInscrits(self, db):
 
 		"""
 		Aquesta funció retorna una llista de correus que són inscrits al taller

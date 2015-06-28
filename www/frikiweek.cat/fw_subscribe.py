@@ -4,6 +4,7 @@
 from flask import Blueprint, render_template, make_response, redirect, request, session, url_for
 import fw_subscribe_db as fw_db
 import send_mail as sm
+import traceback
 from utiles import *
 
 fw_subs_blueprint = Blueprint('fw_subs_blueprint', __name__, template_folder='templates')
@@ -25,7 +26,9 @@ def database_connect(func):
 				db.commit()
 			except Exception as e:
 				db.rollback()
-				return "Alguna cosa no ha anat bé :(<br />Posa't amb contacte amb info[arroba]frikiweek.cat<br /><em>(%s)</em>" % e
+				return """Alguna cosa no ha anat bé :(<br />
+						  Posa't amb contacte amb info[arroba]frikiweek.cat<br />
+						  <pre>%s</pre>""" % traceback.format_exc().replace("\n", "<br />")
 			finally:
 				db.close()
 
@@ -34,15 +37,18 @@ def database_connect(func):
 	func_wrapper.__name__ = func.__name__
 	return func_wrapper
 
-@fw_subs_blueprint.route('/login')
-@fw_subs_blueprint.route('/login/<extra>')
-@database_connect
-def login(db, extra=""):
+def current_uid():
 	try:
 		uid = session['user_id']
 	except KeyError:
 		uid = None
+	return uid
 
+@fw_subs_blueprint.route('/login')
+@fw_subs_blueprint.route('/login/<extra>')
+@database_connect
+def login(db, extra=""):
+	uid = current_uid()
 	if uid:
 		return redirect('/tallers')
 
@@ -83,11 +89,7 @@ def check_login(db):
 @fw_subs_blueprint.route('/tallers/<name>')
 @database_connect
 def apuntat(db, name=None):
-	try:
-		uid = session['user_id']
-	except KeyError:
-		uid = None
-
+	uid = current_uid()
 	if not uid:
 		return redirect('/login/invalid')
 
@@ -102,7 +104,6 @@ def apuntat(db, name=None):
 	user = fw_db.Usuari.getById(db, uid)
 	inscripcions = fw_db.getInscripcions(db, uid)
 	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data.strftime("%d/%m a les %H:%M"), 'inscrit': t.tid in inscripcions} for t in fw_db.getTallers(db)]
-
 	return render_template('apuntador/apuntat.html', name=user.nom, tallers=tallers, success=name == "actualitzat")
 
 @fw_subs_blueprint.route('/logout')
@@ -132,12 +133,9 @@ def signup(db, email=""):
 			usuari = fw_db.Usuari(db, passwd, name, email)
 			r = sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=usuari.confirmacio, _external=True))
 
+			status_code = -1
 			if r != None:
 				status_code = r.status_code
-			else:
-				status_code = -1
-
-			status_code = r.status_code if r != None else -1
 
 			if status_code == 200:
 				usuari.insert()
@@ -159,6 +157,51 @@ def signup_validate(db, confirmation=None):
 	return render_template('apuntador/signup_validated.html')
 
 @fw_subs_blueprint.route('/admin/tallers')
+@fw_subs_blueprint.route('/admin/tallers/<status>')
 @database_connect
-def admin_tallers(db):
-	return render_template('apuntador/admin_tallers.html', tallers=fw_db.tallers_count(db))
+def admin_tallers(db, status=None):
+	msg = error = None
+
+	if status == "success_send":
+		msg = "El missatge s'ha enviat correctament"
+	elif status == "failed_send":
+		error = "El missatge està buit o ha fallat alguna cosa... :(\nPosa't en contacte nosaltres a través de info@frikiweek.cat"
+	
+	return render_template('apuntador/admin_tallers.html', tallers=fw_db.tallers_count(db), msg=msg, error=error, my_uid=current_uid())
+
+@fw_subs_blueprint.route('/admin/send_msg/<id_taller>', methods=["GET", "POST"])
+@database_connect
+def send_msg(db, id_taller=None):
+
+	if not id_taller:
+		return render_template("apuntador/send_msg.html", error="No s'ha especificat cap identificador de taller")
+	
+	uid = current_uid()
+	if not uid:
+		return render_template("apuntador/send_msg.html", error="No estàs autoritzat per veure aquesta pàgina")
+
+	usuari = fw_db.Usuari.getById(db, uid)
+	taller = fw_db.getTallerById(db, id_taller)
+
+	if taller.id_ponent != uid:
+		return render_template("apuntador/send_msg.html", error="No estàs autoritzat per veure aquesta pàgina")
+
+	# L'usuari està autoritzat per enviar missatges a aquest taller
+	if request.method == "GET":
+		return render_template("apuntador/send_msg.html", taller=taller, authorized=True)
+
+	elif request.method == "POST":
+		msg = request.form.get("msg")
+		
+		if not msg:
+			return render_template("apuntador/send_msg.html", taller=taller, error="No has enviat cap missatge", authorized=True)
+
+		inscrits = taller.getInscrits(db)
+		responses = sm.send_about_talk([i.correu for i in inscrits], taller, msg.replace("\n", "<br/ >"))
+		n_success = sum([r.status_code == 200 for r in responses])
+
+		# Si la resposta és una llista de respostes de 'requests' i més del 80% són satisfactòries:
+		if isinstance(responses, list) and n_success > len(responses) * 0.8:
+			return redirect('/admin/tallers/success_send')
+
+	return redirect('/admin/tallers/failed_send')
