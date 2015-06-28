@@ -23,3 +23,19 @@ CREATE TABLE IF NOT EXISTS inscripcio (
 	data DATETIME,
 	PRIMARY KEY(id_usuari, id_taller)
 );
+
+CREATE TRIGGER IF NOT EXISTS auto_increment_permisos_1
+    BEFORE INSERT ON taller
+    FOR EACH ROW
+    WHEN New.id_ponent IS NOT NULL
+    BEGIN
+        UPDATE usuaris set permisos = 1 WHERE id = New.id_ponent;
+    END;
+
+CREATE TRIGGER IF NOT EXISTS auto_increment_permisos_2
+    BEFORE UPDATE ON taller
+    FOR EACH ROW
+    WHEN New.id_ponent <> Old.id_ponent
+    BEGIN
+        UPDATE usuaris set permisos = 1 WHERE id = New.id_ponent;
+    END;

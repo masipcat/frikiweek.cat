@@ -6,27 +6,6 @@ import utiles
 import datetime, time
 from constants import *
 
-"""
-* TALLER
-	- ID (201501, 201502...)
-	- nom
-	- descripció
-	- data
-	- duració
-
-* USUARIS
-	- ID
-	- contrasenya (en hash)
-	- nom
-	- correu
-	- dataRegistre
-
-* INSCRIPCIO
-	- ID_taller
-	- ID_usuari
-	- data
-"""
-
 def db_connect():
 	db = MySQLdb.connect(host=DB_SERVER, user=DB_USER, passwd=DB_PASSWD, db=DB_NAME)
 	db.set_character_set('utf8')
@@ -71,7 +50,7 @@ class Usuari(object):
 	Aquest classe representa usuari
 	"""
 	
-	def __init__(self, db, contrasenya, nom, correu):
+	def __init__(self, db, contrasenya, nom, correu, permisos = 0):
 		self.uid = None
 		self.contrasenya = utiles.sha1('friki' + contrasenya)
 		self.nom = nom
@@ -79,6 +58,7 @@ class Usuari(object):
 		self.dataRegistre = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 		self.confirmacio = utiles.sha1(str(time.time()) + correu)
 		self.cursor = getCursor(db)
+		self.permisos = permisos
 
 	def insert(self):
 		"""
@@ -99,7 +79,8 @@ class Usuari(object):
 		u.dataRegistre = r[4]
 		u.uid = r[0]
 		u.confirmacio = r[5]
-		return user
+		u.permisos = r[6]
+		return u
 
 	@staticmethod
 	def getByEmail(db, email):
