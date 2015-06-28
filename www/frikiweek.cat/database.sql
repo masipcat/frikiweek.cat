@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS usuaris (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	contrasenya VARCHAR(40),
 	nom VARCHAR(40),
-	correu VARCHAR(30) UNIQUE,
+	correu VARCHAR(254) UNIQUE,
 	dataRegistre DATETIME,
 	confirmacio VARCHAR(40),
 	permisos INTEGER,
