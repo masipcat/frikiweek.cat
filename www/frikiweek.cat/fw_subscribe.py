@@ -99,7 +99,7 @@ def apuntat(db, name=None):
 				fw_db.update_inscripcions(db, uid, f.getlist(key))
 				return redirect('/tallers/actualitzat')
 
-	user = fw_db.getUsuari(db, uid)
+	user = fw_db.Usuari.getById(db, uid)
 	inscripcions = fw_db.getInscripcions(db, uid)
 	tallers = [{'id': t.tid, 'nom': t.nom, 'data': t.data.strftime("%d/%m a les %H:%M"), 'inscrit': t.tid in inscripcions} for t in fw_db.getTallers(db)]
 
@@ -124,7 +124,7 @@ def signup(db, email=""):
 		passwd = request.form.get("passwd")
 
 		if name and email and passwd:
-			usuari = fw_db.getUsuariPerEmail(db, email)
+			usuari = fw_db.Usuari.getByEmail(db, email)
 
 			if usuari:
 				return render_template('apuntador/signup.html', error="Aquest usuari ja existeix!")
@@ -140,7 +140,7 @@ def signup(db, email=""):
 			status_code = r.status_code if r != None else -1
 
 			if status_code == 200:
-				usuari.save()
+				usuari.insert()
 				advert = "hotmail" in email or "outlook" in email # Mostra l'advertència de comprovar la carpeta d'spam
 				return render_template('apuntador/signup.html', check_inbox=True, advert=advert)
 		

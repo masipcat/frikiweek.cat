@@ -3,7 +3,7 @@
 
 import MySQLdb
 import utiles
-import datetime
+import datetime, time
 from constants import *
 
 """
@@ -58,39 +58,12 @@ def login(db, correu, contrasenya):
 	return (ERR_USER_INVALID_LOGIN, None)
 
 def confirma(db, codi):
-    
-    """
-    Aquesta funció actulitza el camp de usuari que té la confirmació codi a NULL
-    """
-    cursor = getCursor(db)
-    return cursor.execute("UPDATE usuaris SET confirmacio = NULL WHERE confirmacio = %s", (codi)) > 0
-
-def getUsuari(db, uid):
+	
+	"""
+	Aquesta funció actulitza el camp de usuari que té la confirmació codi a NULL
+	"""
 	cursor = getCursor(db)
-	cursor.execute("SELECT * FROM usuaris WHERE id = %s", str(uid))
-	r = cursor.fetchone()
-	if not r:
-		return None
-
-	u = Usuari(db, r[1], r[2], r[3])
-	u.dataRegistre = r[4]
-	u.uid = r[0]
-	u.confirmacio = r[5]
-	return u
-
-def getUsuariPerEmail(db, email):
-	cursor = getCursor(db)
-	cursor.execute("SELECT * FROM usuaris WHERE correu = %s", email)
-	r = cursor.fetchone()
-	if not r:
-		return None
-
-	u = Usuari(db, r[1], r[2], r[3])
-	u.dataRegistre = r[4]
-	u.uid = r[0]
-	u.confirmacio = r[5]
-        u.permisos = r[6]
-	return u
+	return cursor.execute("UPDATE usuaris SET confirmacio = NULL WHERE confirmacio = %s", (codi)) > 0
 
 class Usuari(object):
 
@@ -98,25 +71,50 @@ class Usuari(object):
 	Aquest classe representa usuari
 	"""
 	
-	def __init__(self, db, contrasenya, nom, correu, permisos):
+	def __init__(self, db, contrasenya, nom, correu):
 		self.uid = None
 		self.contrasenya = utiles.sha1('friki' + contrasenya)
 		self.nom = nom
 		self.correu = correu.lower()
-		data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-		self.dataRegistre = data
-		self.confirmacio = utiles.sha1(data + correu)
+		self.dataRegistre = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+		self.confirmacio = utiles.sha1(str(time.time()) + correu)
 		self.cursor = getCursor(db)
-                self.permisos = permisos
 
-	def save(self):
-		
+	def insert(self):
 		"""
 		Aquest mètode guarda informació de usuari a la taula usuaris 
 		"""
-		self.cursor.execute("INSERT INTO usuaris (contrasenya, nom, correu, dataRegistre, confirmacio) VALUES(%s, %s, %s, %s, %s)", (self.contrasenya, self.nom, self.correu, self.dataRegistre, self.confirmacio, self.permisos))
-                return self.confirmacio
+		if self.uid == None:
+			self.cursor.execute("INSERT INTO usuaris (contrasenya, nom, correu, dataRegistre, confirmacio) VALUES(%s, %s, %s, %s, %s)", (self.contrasenya, self.nom, self.correu, self.dataRegistre, self.confirmacio))
 
+	@staticmethod
+	def getById(db, uid):
+		cursor = getCursor(db)
+		cursor.execute("SELECT * FROM usuaris WHERE id = %s", str(uid))
+		r = cursor.fetchone()
+		if not r:
+			return None
+
+		u = Usuari(db, r[1], r[2], r[3])
+		u.dataRegistre = r[4]
+		u.uid = r[0]
+		u.confirmacio = r[5]
+		return user
+
+	@staticmethod
+	def getByEmail(db, email):
+		cursor = getCursor(db)
+		cursor.execute("SELECT * FROM usuaris WHERE correu = %s", email)
+		r = cursor.fetchone()
+		if not r:
+			return None
+
+		u = Usuari(db, r[1], r[2], r[3])
+		u.dataRegistre = r[4]
+		u.uid = r[0]
+		u.confirmacio = r[5]
+		u.permisos = r[6]
+		return u
 
 def getTallers(db):
 	
@@ -147,7 +145,7 @@ class Taller(object):
 		self.descripcio = descripcio
 		self.data = data
 		self.duracio = duracio
-                self.id_ponent = id_ponent
+		self.id_ponent = id_ponent
 
 
 def getInscripcions(db, id_usuari):
@@ -165,15 +163,15 @@ def getInscripcions(db, id_usuari):
 
 def update_inscripcions(db, id_usuari, llista_tallers):
 
-        """
-        Aquesta funció actulitza inscripcions de id_usuari
-        """
-        cursor = getCursor(db)
+	"""
+	Aquesta funció actulitza inscripcions de id_usuari
+	"""
+	cursor = getCursor(db)
 	cursor.execute("DELETE FROM inscripcio WHERE id_usuari = %s AND Year(data) = Year(%s)", (id_usuari, datetime.datetime.now().strftime('%Y-%m-%d')))
-        data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        for x in llista_tallers:
-                cursor.execute("INSERT INTO inscripcio VALUES(%s, %s, %s)", (id_usuari, x, data))
-        
+	data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+	
+	for id_taller in llista_tallers:
+		cursor.execute("INSERT INTO inscripcio VALUES(%s, %d, %s)", (id_usuari, int(id_taller), data))		
 
 class Inscripcio(object):
 
@@ -197,16 +195,16 @@ class Inscripcio(object):
 
 
 def tallers_count(db):
-        
-        """
-        Aquesta funció donada BD db retorn una llista de tuple on cada tuple té el format (Taller, nombre de inscripcions)
-        """
-        l = []
-        cursor = getCursor(db)
-	cursor.execute("SELECT t.*, COUNT(*) AS nombre FROM taller t, inscripcio i WHERE t.id = i.id_taller AND Year(t.data) = Year(%s) GROUP BY t.id ORDER BY t.data", datetime.datetime.now().strftime('%Y-%m-%d'))
+	
+	"""
+	Aquesta funció donada BD db retorn una llista de tuples on cada tuple té el format (Taller, nombre de inscripcions)
+	"""
+	l = []
+	cursor = getCursor(db)
+	cursor.execute("SELECT t.*, COUNT(*) AS recompte FROM taller t, inscripcio i WHERE t.id = i.id_taller AND Year(t.data) = Year(%s) GROUP BY t.id ORDER BY t.data", datetime.datetime.now().strftime('%Y-%m-%d'))
 
-        for row in cursor:
-                tid, nom, descripcio, data, duracio, nombre = row
-                l.append((Taller(tid, nom, descripcio, data, duracio), nombre))
-        return l
-
+	for row in cursor:
+		tid, nom, descripcio, data, duracio, id_ponent, recompte = row
+		l.append((Taller(tid, nom, descripcio, data, duracio, id_ponent), recompte))
+	
+	return l
