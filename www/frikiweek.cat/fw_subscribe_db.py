@@ -112,6 +112,21 @@ def getTallers(db):
 
 	return l
 
+def getTallerById(db, id_taller):
+
+	"""
+	Aquest funció donada BD db i id_taller retorna Taller on id de taller és id_taller
+	"""
+	l = []
+	cursor = getCursor(db)
+	cursor.execute("SELECT * FROM taller WHERE id = %s", (id_taller, ))
+	r = cursor.fetchone()
+	if not r:
+		return None
+
+	t = Taller(db, r[0], r[1], r[2], r[3], r[4], r[5])
+	return t
+
 	
 class Taller(object):
 
@@ -127,6 +142,25 @@ class Taller(object):
 		self.data = data
 		self.duracio = duracio
 		self.id_ponent = id_ponent
+
+	def getInscrits(self):
+
+		"""
+		Aquesta funció retorna una llista de correus que són inscrits al taller
+		"""
+		l = []
+		cursor = getCursor(db)
+		cursor.execute("SELECT u.* FROM usuaris u, inscripcio i WHERE u.id = i.id_usuari AND i.id_taller = %s", self.tid)
+
+		for r in cursor:
+			u = Usuari(db, r[1], r[2], r[3])
+			u.dataRegistre = r[4]
+			u.uid = r[0]
+			u.confirmacio = r[5]
+			u.permisos = r[6]
+			l.append(u)
+
+		return l
 
 
 def getInscripcions(db, id_usuari):
