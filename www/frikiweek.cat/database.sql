@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS taller (
 	nom VARCHAR(20),
 	descripcio VARCHAR (200),
 	data DATETIME,
-	duracio REAL
+	duracio REAL,
+	id_ponent INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS usuaris (
@@ -12,7 +13,8 @@ CREATE TABLE IF NOT EXISTS usuaris (
 	nom VARCHAR(40),
 	correu VARCHAR(30) UNIQUE,
 	dataRegistre DATETIME,
-	confirmacio VARCHAR(40)
+	confirmacio VARCHAR(40),
+	permisos INTEGER,
 );
 
 CREATE TABLE IF NOT EXISTS inscripcio (

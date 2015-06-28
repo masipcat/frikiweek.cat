@@ -89,6 +89,7 @@ def getUsuariPerEmail(db, email):
 	u.dataRegistre = r[4]
 	u.uid = r[0]
 	u.confirmacio = r[5]
+        u.permisos = r[6]
 	return u
 
 class Usuari(object):
@@ -97,7 +98,7 @@ class Usuari(object):
 	Aquest classe representa usuari
 	"""
 	
-	def __init__(self, db, contrasenya, nom, correu):
+	def __init__(self, db, contrasenya, nom, correu, permisos):
 		self.uid = None
 		self.contrasenya = utiles.sha1('friki' + contrasenya)
 		self.nom = nom
@@ -106,13 +107,14 @@ class Usuari(object):
 		self.dataRegistre = data
 		self.confirmacio = utiles.sha1(data + correu)
 		self.cursor = getCursor(db)
+                self.permisos = permisos
 
 	def save(self):
 		
 		"""
 		Aquest mètode guarda informació de usuari a la taula usuaris 
 		"""
-		self.cursor.execute("INSERT INTO usuaris (contrasenya, nom, correu, dataRegistre, confirmacio) VALUES(%s, %s, %s, %s, %s)", (self.contrasenya, self.nom, self.correu, self.dataRegistre, self.confirmacio))
+		self.cursor.execute("INSERT INTO usuaris (contrasenya, nom, correu, dataRegistre, confirmacio) VALUES(%s, %s, %s, %s, %s)", (self.contrasenya, self.nom, self.correu, self.dataRegistre, self.confirmacio, self.permisos))
                 return self.confirmacio
 
 
@@ -126,8 +128,8 @@ def getTallers(db):
 	cursor.execute("SELECT * FROM taller WHERE Year(data) = Year(%s) ORDER BY data", (datetime.datetime.now().strftime('%Y-%m-%d'), ))
 
 	for row in cursor:
-		tid, nom, descripcio, data, duracio = row
-		l.append(Taller(tid, nom, descripcio, data, duracio))
+		tid, nom, descripcio, data, duracio, id_ponent = row
+		l.append(Taller(tid, nom, descripcio, data, duracio, id_ponent))
 
 	return l
 
@@ -138,13 +140,14 @@ class Taller(object):
 	Aquest classe representa taller
 	"""
 
-	def __init__(self, tid, nom, descripcio, data, duracio):
+	def __init__(self, tid, nom, descripcio, data, duracio, id_ponent):
 
 		self.tid = tid
 		self.nom = nom
 		self.descripcio = descripcio
 		self.data = data
 		self.duracio = duracio
+                self.id_ponent = id_ponent
 
 
 def getInscripcions(db, id_usuari):
