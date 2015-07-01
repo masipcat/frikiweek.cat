@@ -12,7 +12,7 @@
 
 {% for t, count in tallers %}
 <div style="margin-bottom:7px">
-	(<strong>{{ count }}</strong> inscrits) - <strong>{{ t.nom }}</strong> {% if t.id_ponent == my_uid %}[<a href="/admin/send_msg/{{ t.tid }}">envia un missatge</a>]{% endif %}
+	(<strong>{{ count }}</strong> inscrits) - <strong>{{ t.nom }}</strong> {% if my_uid != None and t.id_ponent == my_uid %}[<a href="/admin/send_msg/{{ t.tid }}">envia un missatge</a>]{% endif %}
 </div>
 {% endfor %}
 {% endblock %}

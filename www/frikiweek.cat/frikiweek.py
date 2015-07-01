@@ -4,6 +4,7 @@
 from flask import Flask, request, redirect, url_for, send_from_directory, make_response, render_template, session
 from flask.ext.session import Session
 from fw_subscribe import fw_subs_blueprint
+from iot import fw_iot_blueprint
 from werkzeug import secure_filename
 from utiles import *
 import json, datetime, sys
@@ -13,6 +14,7 @@ sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 app.register_blueprint(fw_subs_blueprint)
+app.register_blueprint(fw_iot_blueprint)
 
 DB_SERVER = "10.131.153.116"
 

@@ -184,7 +184,7 @@ def update_inscripcions(db, id_usuari, llista_tallers):
 	data = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 	
 	for id_taller in llista_tallers:
-		cursor.execute("INSERT INTO inscripcio VALUES(%s, %d, %s)", (id_usuari, int(id_taller), data))		
+		cursor.execute("INSERT INTO inscripcio VALUES(%s, %s, %s)", (id_usuari, id_taller, data))
 
 class Inscripcio(object):
 
