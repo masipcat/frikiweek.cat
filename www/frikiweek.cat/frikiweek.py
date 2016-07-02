@@ -6,7 +6,10 @@ from flask.ext.session import Session
 from fw_subscribe import fw_subs_blueprint
 from werkzeug import secure_filename
 from utiles import *
-import json, datetime, sys
+from db_constants import REDIS_SECRET_KEY
+import json
+import datetime
+import sys
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -17,7 +20,7 @@ app.register_blueprint(fw_subs_blueprint)
 
 SESSION_TYPE = 'redis'
 app.config.from_object(__name__)
-app.secret_key = 'blueKey'
+app.secret_key = REDIS_SECRET_KEY
 Session(app)
 
 @app.route('/')

@@ -9,20 +9,31 @@ from utiles import *
 
 fw_subs_blueprint = Blueprint('fw_subs_blueprint', __name__, template_folder='templates')
 
+def auth(func):
+	def func_wrapper(*args, **kwarg):
+		uid = current_uid()
+		if not uid:
+			return redirect('/login')
+
+		return func(uid, *args, **kwarg)
+	
+	func_wrapper.__name__ = func.__name__
+	return func_wrapper
+
 def database_connect(func):
 	"""
 	Decorator que connecta automàticament a la DB, passa la instància com argument, fa commit()/rollback() i tanca la DB
 	"""
-	def func_wrapper(**kwarg):
+	def func_wrapper(*args, **kwarg):
 		if current_app.debug:
 			db = fw_db.db_connect()
-			response = func(db, **kwarg)
+			response = func(db, *args, **kwarg)
 			db.commit()
 			db.close()
 		else:
 			try:
 				db = fw_db.db_connect()
-				response = func(db, **kwarg)
+				response = func(db, *args, **kwarg)
 				db.commit()
 			except Exception as e:
 				db.rollback()
@@ -51,7 +62,7 @@ def login(db, extra=""):
 	uid = current_uid()
 	if uid:
 		return redirect('/tallers')
-
+	
 	if extra == "invalid":
 		return render_template("apuntador/login.html", error="Usuari o contrassenya incorrectes")
 	elif extra != "":
@@ -87,12 +98,9 @@ def check_login(db):
 
 @fw_subs_blueprint.route('/tallers', methods=['GET', 'POST'])
 @fw_subs_blueprint.route('/tallers/<name>')
+@auth
 @database_connect
-def apuntat(db, name=None):
-	uid = current_uid()
-	if not uid:
-		return redirect('/login/invalid')
-
+def apuntat(db, uid, name=None):
 	if request.method == 'POST':
 		f = request.form
 		tallers = []
