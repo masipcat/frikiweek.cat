@@ -11,9 +11,9 @@ def default_structure(nom):
 		salutacio = "Hola %s" % nom
 
 	return """{0},<br/><br/>%s<br/><br/>
-	<strong>T'esperem la setmana del 29!</strong><br/><br/>
+	<strong>T'esperem la setmana del 4!</strong><br/><br/>
 	Atentament,<br>
-	Els coordinadors de la FW15<br><br>
+	Els coordinadors de la FW'16<br><br>
 	<em>Si tens qualsevol dubte, pots escriure'ns a info@frikiweek.cat</em>""".format(salutacio)
 
 def send_confirmation_mail(to, nom, confirm_url):
