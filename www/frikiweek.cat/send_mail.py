@@ -42,8 +42,5 @@ def send_mailgun(list_to_send, subject, html):
 			  "to": to,
 			  "subject": subject,
 			  "html": html}) for to in list_to_send]
-
-	if len(responses) == 1:
-		return responses[0]
-	else:
-		return responses
+	
+	return responses

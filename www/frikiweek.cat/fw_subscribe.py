@@ -172,7 +172,7 @@ def signup(db, email=""):
 				return render_template('apuntador/signup.html', error="Aquest usuari ja existeix!")
 
 			usuari = fw_db.Usuari(db, passwd, name, email)
-			r = sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=usuari.confirmacio, _external=True))
+			r = sm.send_confirmation_mail(email, name, url_for('.signup_validate', confirmation=usuari.confirmacio, _external=True))[0]
 
 			status_code = -1
 			if r != None:
