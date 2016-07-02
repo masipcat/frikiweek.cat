@@ -96,6 +96,24 @@ def check_login(db):
 	session['user_id'] = None
 	return redirect('/login/invalid')
 
+@fw_subs_blueprint.route('/resetpassword')
+def reset_password(password_hash=""):
+	return render_template('apuntador/reset_password.html')
+
+@fw_subs_blueprint.route('/resetpassword/<password_hash>', methods=['GET', 'POST'])
+def reset_password(password_hash):
+	if request.methods == 'GET':
+		return render_template('apuntador/reset_password.html', password_hash=password_hash)
+
+	if fw_db.can_reset_password(password_hash):
+		email = request.form.get("email")
+		passwd = request.form.get("passwd")
+		
+		if email and passwd:
+		 	fw_db.reset_password(db, password_hash, email, passwd)
+
+	return render_template('apuntador/reset_password.html', email_sent=True)
+
 @fw_subs_blueprint.route('/tallers', methods=['GET', 'POST'])
 @fw_subs_blueprint.route('/tallers/<name>')
 @auth

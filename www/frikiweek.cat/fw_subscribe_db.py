@@ -28,7 +28,7 @@ def login(db, correu, contrasenya):
 	Aquesta funció donada BD, correu i contrasenya retorn id de usuari si la contrasenya es correcte, sinó ERR_USER_INVALID_LOGIN
 	"""
 	cursor = getCursor(db)
-	cursor.execute("SELECT id FROM usuaris WHERE correu=%s AND contrasenya=%s", (correu, utiles.sha1('friki' + contrasenya)))
+	cursor.execute("SELECT id FROM usuaris WHERE correu=%s AND contrasenya=%s", (correu, utiles.sha1(HASH_KEY_PAYLOAD + contrasenya)))
 	uid = cursor.fetchone()
 	
 	if uid:
@@ -52,7 +52,7 @@ class Usuari(object):
 	
 	def __init__(self, db, contrasenya, nom, correu, permisos = 0):
 		self.uid = None
-		self.contrasenya = utiles.sha1('friki' + contrasenya)
+		self.contrasenya = utiles.sha1(HASH_KEY_PAYLOAD + contrasenya)
 		self.nom = nom
 		self.correu = correu.lower()
 		self.dataRegistre = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -96,6 +96,25 @@ class Usuari(object):
 		u.confirmacio = r[5]
 		u.permisos = r[6]
 		return u
+
+def can_reset_password(db, password_hash):
+	"""
+	Aquest funció donada BD i cadena hash retorna True is el hash és vàlid
+	"""
+	cursor = getCursor(db)
+	cursor.execute("SELECT * FROM usuaris WHERE contrasenya = %s", (password_hash, ))
+
+	r = cursor.fetchone()
+	if not r:
+		return False
+	return True
+
+def reset_password(db, password_hash, email, passwd):
+	"""
+	Aquesta funció canvia la contrasenya d'usuari amb correu email si la cadena hash és vàlida
+	"""
+	cursor = getCursor(db)
+	return cursor.execute("UPDATE usuaris SET contrasenya = %s WHERE correu = %s AND contrasenya = %s", (password_hash, email, utiles.sha1(HASH_KEY_PAYLOAD + passwd))) > 0
 
 def getTallers(db):
 	
