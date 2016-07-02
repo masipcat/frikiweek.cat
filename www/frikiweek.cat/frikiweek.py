@@ -15,11 +15,10 @@ app = Flask(__name__)
 app.debug = True
 app.register_blueprint(fw_subs_blueprint)
 
-DB_SERVER = "fw.jordi.tech"
-
-#SESSION_TYPE = 'redis'
-#app.config.from_object(__name__)
-#Session(app)
+SESSION_TYPE = 'redis'
+app.config.from_object(__name__)
+app.secret_key = 'blueKey'
+Session(app)
 
 @app.route('/')
 def redirection():
