@@ -1,8 +1,8 @@
 Idea,Estat,Data,Hora,Aula,Autor,Requisits,Descripció
-Disseny Web,Confirmat,04/07,9:30 - 12:30,Info 2,Èrik Campobadal i Roger Solans,Tots els públics,"Disseny d'una aplicació web en HTML5, CSS i JS, utilitzant frameworks per agilitzar el desenvolupament"
-Desenvolupament Web,Confirmat,05/07,9:30 - 12:31,Info 2,Èrik Campobadal i Roger Solans,Tots els públics,Desenvolupament d'una aplicació web en PHP i MySQL utilitzant el disseny de l'anterior taller utilitzant un framework per agilitzar el desenvolupament
+Introducció al disseny web,Confirmat,04/07,9:30 - 12:30,Info 2,Èrik Campobadal i Roger Solans,Tots els públics,Disseny d'una aplicació web en HTML5, CSS i JS, utilitzant frameworks per agilitzar el desenvolupament
+Introducció al desenvolupament web,Confirmat,05/07,9:30 - 12:31,Info 2,Èrik Campobadal i Roger Solans,Tots els públics,Desenvolupament d'una aplicació web en PHP i MySQL utilitzant el disseny de l'anterior taller utilitzant un framework per agilitzar el desenvolupament
 Continuos Delivery amb Gitlab CI i Docker,Idea / Proposta,06/07,10:00 - 12:00,Aula 2.4,Jordi Masip,Tots els públics,Introducció a la automatizació del desplegament de llocs web amb Gitlab CI i Docker
 Les TIC i la radioafició,Idea / Proposta,--/--,,,Joan Martínez,Tots els públics,Xerrada oberta/demo sobre comunicacions digitals i altres aspectes TIC en el mon de les comunicacions per a radioaficionats
 Anàlisi automàtic de circuits,Idea / Proposta,07/07,,,Pere Palà,Tots els públics,Analitzar circuits a mà és relativament pesat. Però és relativament senzill fer programes amb Python que resolguin aquest tema!
-Python per a dummies,Idea / Proposta,--/--,9:30 - 11:30,Info 2,Hafid Kharbouch,Tots els públics,"Introducció a la programació amb Python: què són les variables, funcions, condicionals, loops, ..."
+Python per a dummies,Idea / Proposta,--/--,9:30 - 11:30,Info 2,Hafid Kharbouch,Tots els públics,Introducció a la programació amb Python: què són les variables, funcions, condicionals, loops, ...
 Fibra òptica lliure / Nou marc regulador de la Fundació Guifi.net,Confirmat,08/07,10:00 - 12:00,Aula 2.4,Paco,Tots els públics,Xerrada sobre el nou marc regulador que permet crear fibra de comuns amb unes desgrabacions fiscals importants
