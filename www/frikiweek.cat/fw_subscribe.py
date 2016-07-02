@@ -116,7 +116,7 @@ def reset_password_action_post(db, password_hash=None):
 		if token:
 			sm.send_reset_password_mail(email, url_for('.reset_password_action_get', password_hash=token, _external=True))
 		
-		return render_template('apuntador/reset_password.html', msg="Si l'adreça de correu es troba a la nostra base de dades rebràs un missatge.")
+		return render_template('apuntador/reset_password.html', msg="Si l'adreça de correu es troba a la nostra base de dades, rebràs un missatge. El correu pot tardar a enviar-se fins a 5 minuts.")
 		
 	else: # Processar el canvi de contrasenya
 		if fw_db.can_reset_password(db, password_hash):
