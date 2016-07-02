@@ -18,9 +18,15 @@ def default_structure(nom):
 
 def send_confirmation_mail(to, nom, confirm_url):
 	html = default_structure(nom) % """Gràcies per registrar-te! Ara només has de clicar el següent enllaç:<br/><br/>
-	<a href='{1}'>Confirmació</a><br/><br/>""".format(nom, confirm_url)
+	<a href='{0}'>Confirmació</a><br/><br/>""".format(confirm_url)
 
 	return send_mailgun(to, "Confirmació de l'adreça electrònica", html)
+
+def send_reset_password_mail(to, change_url):
+	html = default_structure("") % """Clica el següent enllaç per escollir una nova contrasenya:<br/><br/>
+	<a href='{0}'>Canvia</a><br/><br/>""".format(change_url)
+
+	return send_mailgun(to, "Canvi de contrasenya", html)
 
 def send_about_talk(to, taller, html):
 	return send_mailgun(to, "FW15 - %s" % taller.nom, html)

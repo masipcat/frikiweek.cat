@@ -99,20 +99,35 @@ def check_login(db):
 	session['user_id'] = None
 	return redirect('/login/invalid/%s' % email)
 
-@fw_subs_blueprint.route('/resetpassword', methods=['GET'])
-@fw_subs_blueprint.route('/resetpassword/<password_hash>', methods=['GET', 'POST'])
-def reset_password_action(password_hash=""):
-	if request.method == 'GET':
-		return render_template('apuntador/reset_password.html', password_hash=password_hash)
+@fw_subs_blueprint.route('/resetpassword')
+@fw_subs_blueprint.route('/resetpassword/<password_hash>')
+def reset_password_action_get(password_hash=None):
+	# Formulari per posar l'email o la nova contrasenya
+	return render_template('apuntador/reset_password.html', password_hash=password_hash)
 
-	if fw_db.can_reset_password(password_hash):
+@fw_subs_blueprint.route('/resetpassword', methods=['POST'])
+@fw_subs_blueprint.route('/resetpassword/<password_hash>', methods=['POST'])
+@database_connect
+def reset_password_action_post(db, password_hash=None):
+	if password_hash == None: # Processar enviament email
 		email = request.form.get("email")
-		passwd = request.form.get("passwd")
+		token = fw_db.get_reset_password_hash_if_exists(db, email)
 		
-		if email and passwd:
-		 	fw_db.reset_password(db, password_hash, email, passwd)
-
-	return render_template('apuntador/reset_password.html', email_sent=True)
+		if token:
+			sm.send_reset_password_mail(email, url_for('.reset_password_action_get', password_hash=token, _external=True))
+		
+		return render_template('apuntador/reset_password.html', msg="Si l'adreça de correu es troba a la nostra base de dades rebràs un missatge.")
+		
+	else: # Processar el canvi de contrasenya
+		if fw_db.can_reset_password(db, password_hash):
+			email = request.form.get("email")
+			passwd = request.form.get("passwd")
+			
+			if email and passwd:
+				if fw_db.reset_password(db, password_hash, email, passwd):
+					return render_template('apuntador/reset_password.html', msg="La contrasenya s'ha canviat correctament")
+		
+		return render_template('apuntador/reset_password.html', msg="La contrasenya s'ha canviat correctament")
 
 @fw_subs_blueprint.route('/tallers', methods=['GET', 'POST'])
 @fw_subs_blueprint.route('/tallers/<name>')

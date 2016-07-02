@@ -97,6 +97,18 @@ class Usuari(object):
 		u.permisos = r[6]
 		return u
 
+def get_reset_password_hash_if_exists(db, email):
+	"""
+	Aquest funció donada BD i cadena hash retorna True is el hash és vàlid
+	"""
+	cursor = getCursor(db)
+	cursor.execute("SELECT contrasenya FROM usuaris WHERE correu = %s", (email, ))
+
+	try:
+		return cursor.fetchone()[0]
+	except:
+		return None
+
 def can_reset_password(db, password_hash):
 	"""
 	Aquest funció donada BD i cadena hash retorna True is el hash és vàlid
@@ -104,17 +116,17 @@ def can_reset_password(db, password_hash):
 	cursor = getCursor(db)
 	cursor.execute("SELECT * FROM usuaris WHERE contrasenya = %s", (password_hash, ))
 
-	r = cursor.fetchone()
-	if not r:
+	try:
+		return cursor.fetchone()[0] != None
+	except:
 		return False
-	return True
 
 def reset_password(db, password_hash, email, passwd):
 	"""
 	Aquesta funció canvia la contrasenya d'usuari amb correu email si la cadena hash és vàlida
 	"""
 	cursor = getCursor(db)
-	return cursor.execute("UPDATE usuaris SET contrasenya = %s WHERE correu = %s AND contrasenya = %s", (password_hash, email, utiles.sha1(HASH_KEY_PAYLOAD + passwd))) > 0
+	return cursor.execute("UPDATE usuaris SET contrasenya = %s WHERE correu = %s AND contrasenya = %s", (utiles.sha1(HASH_KEY_PAYLOAD + passwd), email, password_hash)) > 0
 
 def getTallers(db):
 	
