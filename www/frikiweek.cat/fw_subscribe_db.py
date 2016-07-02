@@ -20,7 +20,7 @@ def getCursor(db):
 
 def user_exist(db, correu):
 	cursor = getCursor(db)
-	cursor.execute("SELECT COUNT(*) FROM usuaris WHERE correu=%s", [correu])
+	cursor.execute("SELECT COUNT(*) FROM usuaris WHERE correu=%s", (correu,))
 	return cursor.fetchone()[0] > 0
 
 def login(db, correu, contrasenya):  
@@ -42,7 +42,7 @@ def confirma(db, codi):
 	Aquesta funció actulitza el camp de usuari que té la confirmació codi a NULL
 	"""
 	cursor = getCursor(db)
-	return cursor.execute("UPDATE usuaris SET confirmacio = NULL WHERE confirmacio = %s", (codi)) > 0
+	return cursor.execute("UPDATE usuaris SET confirmacio = NULL WHERE confirmacio = %s", (codi,)) > 0
 
 class Usuari(object):
 
@@ -70,7 +70,7 @@ class Usuari(object):
 	@staticmethod
 	def getById(db, uid):
 		cursor = getCursor(db)
-		cursor.execute("SELECT * FROM usuaris WHERE id = %s", str(uid))
+		cursor.execute("SELECT * FROM usuaris WHERE id = %s", (str(uid),))
 		r = cursor.fetchone()
 		if not r:
 			return None
@@ -85,7 +85,7 @@ class Usuari(object):
 	@staticmethod
 	def getByEmail(db, email):
 		cursor = getCursor(db)
-		cursor.execute("SELECT * FROM usuaris WHERE correu = %s", email)
+		cursor.execute("SELECT * FROM usuaris WHERE correu = %s", (email,))
 		r = cursor.fetchone()
 		if not r:
 			return None
@@ -179,7 +179,7 @@ class Taller(object):
 		"""
 		l = []
 		cursor = getCursor(db)
-		cursor.execute("SELECT u.* FROM usuaris u, inscripcio i WHERE u.id = i.id_usuari AND i.id_taller = %s", self.tid)
+		cursor.execute("SELECT u.* FROM usuaris u, inscripcio i WHERE u.id = i.id_usuari AND i.id_taller = %s", (self.tid,))
 
 		for r in cursor:
 			u = Usuari(db, r[1], r[2], r[3])
