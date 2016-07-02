@@ -238,14 +238,14 @@ class Inscripcio(object):
 		self.cursor.execute("INSERT INTO inscripcio VALUES(%s, %s, %s)", (self.id_taller, self.id_usuari, self.data))
 
 
-def tallers_count(db):
+def llista_tallers(db):
 	
 	"""
 	Aquesta funció donada BD db retorn una llista de tuples on cada tuple té el format (Taller, nombre de inscripcions)
 	"""
 	l = []
 	cursor = getCursor(db)
-	cursor.execute("SELECT t.*, COUNT(*) AS recompte FROM taller t, inscripcio i WHERE t.id = i.id_taller AND Year(t.data) = Year(%s) GROUP BY t.id ORDER BY t.data", (datetime.datetime.now().strftime('%Y-%m-%d'),))
+	cursor.execute("SELECT t.*, COUNT(*) AS recompte FROM taller t LEFT JOIN inscripcio i ON t.id = i.id_taller WHERE Year(t.data) = Year(%s) GROUP BY t.id ORDER BY t.data", (datetime.datetime.now().strftime('%Y-%m-%d'),))
 
 	for row in cursor:
 		tid, nom, descripcio, data, duracio, id_ponent, recompte = row
