@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, redirect, url_for, send_from_directory, make_response, render_template, session
+from flask import Flask, request, redirect, url_for, send_from_directory, make_response, render_template, render_template_string, session
 from flask.ext.session import Session
 from fw_subscribe import fw_subs_blueprint
-from iot import fw_iot_blueprint
 from werkzeug import secure_filename
 from utiles import *
 import json, datetime, sys
@@ -13,27 +12,23 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
+app.debug = True
 app.register_blueprint(fw_subs_blueprint)
-app.register_blueprint(fw_iot_blueprint)
 
-DB_SERVER = "10.131.153.116"
+DB_SERVER = "fw.jordi.tech"
 
-SESSION_TYPE = 'redis'
-app.config.from_object(__name__)
-Session(app)
+#SESSION_TYPE = 'redis'
+#app.config.from_object(__name__)
+#Session(app)
 
 @app.route('/')
 def redirection():
-	return beta()
+	nav = getNavigation()
+	return render_template("index.html", container=nav, navigation=nav)
 
 @app.route('/github')
 def github():
 	return redirect("http://github.com/masipcat/frikiweek.cat")
-
-@app.route('/beta')
-def beta():
-	nav = getNavigation()
-	return render_template("index.html", container=nav, navigation=nav)
 
 @app.route('/robots.txt')
 def robots():
@@ -52,17 +47,22 @@ def sitemap():
 
 	return render_template("sitemap.xml", map=nav)
 
-def getNavigation():
-	with app.open_resource('templates/tallers.html', 'r') as f:
-		tallers = unicode(f.read(), 'utf-8')
+def getTallersHtml():
+	keys = ('title', '_', 'date', 'time', 'location', 'author', 'requirements', 'description')
 
-	c1 = u"""<h2>Benvinguts a la 5a edició de la FW!</h2>
+	with app.open_resource('calendari-2016.csv', 'r') as f:
+		lines = unicode(f.read(), 'utf-8').split("\n")[1:]
+		tallers_dict = [dict(zip(keys, l.split(","))) for l in lines]
+		return render_template('tallers.html', tallers=tallers_dict)
+
+def getNavigation():
+	c1 = u"""<h2>Benvinguts a la 6a edició de la FW!</h2>
 			<p>La FW és una iniciativa nascuda dels estudiants del Grau en Enginyeria de Sistemes TIC, que <strong>té com a objectiu intercanviar coneixements, relacionats amb les TIC, entre estudiants i interessats</strong>.</p> <p>La FW se celebra la setmana posterior als exàmens finals dels estudiants de TIC. És a dir, la última setmana de juny (vés a les <a href="#activitats">activitats</a> per a més informació). Aquí trobareu tota la informació sobre aquest esdeveniment que des del 2011 es celebra a l'<strong>Escola Politècnica Superior d'Enginyeria de Manresa</strong> (EPSEM, UPC). </p>
 			<p>Tot seguit trobareu a l'apartat <a href="#activitats">activitats</a> un llistat de totes de les activitats que es realitzaran enguany. Tots els tallers són gratuïts (excepte la paella).</p>"""
-	c2 = u"""<p>Enguany, la FW'15 serà del dia <strong>29 de juny al 3 de juliol</strong>, on acabarem la setmana d'activitats amb la tradicional paella.</p>
-			<p>Per fi tenim la llista definitiva d'activitats! <strong>Apunta't ara, només tardaràs un minut!</strong> Per fer-ho, vés a l'<a href="/login">*apuntador</a> d'activitats.</p>
+	c2 = u"""<p>Enguany, la FW'16 serà del dia <strong>2 al 8 de juliol</strong></p>
+			<p>Per fi tenim la llista definitiva d'activitats! <strong>Apunta't ara, només tardaràs un minut!</strong> Per fer-ho, vés a la <a href="/tallers">pàgina d'inscripcions</a> d'activitats.</p>
 			<ul>{0}</ul>
-			<p>Si tens qualsevol dubte, envia'ns un correu a <strong>info[ensaimada]frikiweek.cat</strong>.</p>""".format(tallers)
+			<p>Si tens qualsevol dubte, envia'ns un correu a <strong>info[ensaimada]frikiweek.cat</strong>.</p>""".format(getTallersHtml())
 	#c3 = u"""<p><strong>Les dates definitives de l'esdeveniment encara no s'han fixat,</strong> però us podem avançar una data aproximada.</p>
 	#		<p>Cada any la FW es celebra una setmana després dels examens finals, de manera que es celebrarà entre l'última setmana de juny i la primera de juliol</p>"""
 	c4 = u"""<p>La <strong>FrikiWeek</strong> va néixer l'estiu de l'any 2011 de la mà dels primers estudiants de l'<strong>Enginyeria de Sistemes TIC</strong> (troba més informació sobre el grau a <a href="http://itic.cat">itic.cat</a>), amb el suport dels professors del grau.</p>
@@ -84,6 +84,4 @@ def getBlockContentWithContent(content):
 	return block.format(content)
 
 if __name__ == '__main__':
-	DB_SERVER = "d2.frikiweek.cat"
-	app.debug = True
-	app.run()
+	app.run(host='0.0.0.0')
