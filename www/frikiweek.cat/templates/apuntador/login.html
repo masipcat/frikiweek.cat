@@ -3,12 +3,17 @@
 {% block content %}
 <h1>Inicia sessió per inscriure't a la FW'16</h1>
 
-{% if error %}<p style="color:#A00">{{ error }}</p>{% endif %}
+<p>Si encara no t'has registra't, fes-ho <a href="/signup">aquí</a>!</p>
 
 <form action="/check_login" method="POST">
 	<input name="email" placeholder="email" type="text" {% if email %}value="{{ email }}"{% endif %} />
-	{% if email %}<input name="passwd" placeholder="passwd" type="password" />{% endif %}
-	Si encara no t'has registra't, fes-ho <a href="/signup">aquí</a>. O potser <a href="">has oblidat la contrassenya?</a><br>
-	<input type="submit" value="Endavant!" />
+	<input name="passwd" placeholder="passwd" type="password" />
+	<p>
+		<small>
+			<em>o <a href="/resetpassword">has oblidat la contrassenya</a>?</em>
+		</small>
+	</p>
+	{% if error %}<p style="color:#A00">{{ error }}</p>{% endif %}
+	<input type="submit" value="Inicia sessió" />
 </form>
 {% endblock %}

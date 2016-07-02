@@ -67,6 +67,9 @@ def login(db, error="", email=""):
 	if error == "invalid":
 		return render_template("apuntador/login.html", error="Usuari o contrassenya incorrectes", email=email)
 	
+	if error == "_":
+		return render_template("apuntador/login.html", email=email)
+	
 	else:
 		return render_template("apuntador/login.html")
 
@@ -99,7 +102,7 @@ def check_login(db):
 @fw_subs_blueprint.route('/resetpassword', methods=['GET'])
 @fw_subs_blueprint.route('/resetpassword/<password_hash>', methods=['GET', 'POST'])
 def reset_password_action(password_hash=""):
-	if request.methods == 'GET':
+	if request.method == 'GET':
 		return render_template('apuntador/reset_password.html', password_hash=password_hash)
 
 	if fw_db.can_reset_password(password_hash):
