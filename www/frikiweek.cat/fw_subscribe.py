@@ -56,19 +56,22 @@ def current_uid():
 	return uid
 
 @fw_subs_blueprint.route('/login')
-@fw_subs_blueprint.route('/login/<extra>')
+@fw_subs_blueprint.route('/login/<error>')
+@fw_subs_blueprint.route('/login/<error>/<email>')
 @database_connect
-def login(db, extra=""):
+def login(db, error="", email=""):
 	uid = current_uid()
 	if uid:
 		return redirect('/tallers')
 	
-	if extra == "invalid":
-		return render_template("apuntador/login.html", error="Usuari o contrassenya incorrectes")
-	elif extra != "":
-		return render_template("apuntador/login.html", email=extra)
+	if error == "invalid":
+		return render_template("apuntador/login.html", error="Usuari o contrassenya incorrectes", email=email)
+	
 	else:
 		return render_template("apuntador/login.html")
+
+def unauthorized():
+	return render_template("apuntador/login.html", content="No estàs autoritzat per veure aquesta pàgina")
 
 @fw_subs_blueprint.route('/check_login', methods=["POST"])
 @database_connect
@@ -81,11 +84,8 @@ def check_login(db):
 		
 	exist = fw_db.user_exist(db, email)
 
-	if not exist:
-		return redirect('/signup/%s' % email)
-
-	if not passwd:
-		return redirect('/login/%s' % email)
+	if not exist or not passwd:
+		return redirect('/login/invalid/%s' % email)
 
 	status, uid = fw_db.login(db, email, passwd)
 	
@@ -94,7 +94,7 @@ def check_login(db):
 		return redirect('/tallers')
 
 	session['user_id'] = None
-	return redirect('/login/invalid')
+	return redirect('/login/invalid/%s' % email)
 
 @fw_subs_blueprint.route('/resetpassword')
 def reset_password(password_hash=""):

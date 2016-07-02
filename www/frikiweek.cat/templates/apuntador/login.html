@@ -8,6 +8,7 @@
 <form action="/check_login" method="POST">
 	<input name="email" placeholder="email" type="text" {% if email %}value="{{ email }}"{% endif %} />
 	{% if email %}<input name="passwd" placeholder="passwd" type="password" />{% endif %}
+	Si encara no t'has registra't, fes-ho <a href="/signup">aquí</a>. O potser <a href="">has oblidat la contrassenya?</a><br>
 	<input type="submit" value="Endavant!" />
 </form>
 {% endblock %}
