@@ -54,7 +54,7 @@ def getTallersHtml():
 
 	with app.open_resource('calendari-2016.csv', 'r') as f:
 		lines = unicode(f.read(), 'utf-8').split("\n")[1:]
-		tallers_dict = [dict(zip(keys, l.split(","))) for l in lines]
+		tallers_dict = [dict(zip(keys, l.split("\\"))) for l in lines]
 		return render_template('tallers.html', tallers=tallers_dict)
 
 def getNavigation():
