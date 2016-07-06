@@ -258,7 +258,7 @@ def llista_usuaris_inscrits(db):
 	Aquesta funció donada BD db retorn un diccionari de llista de noms de usuaris inscrits
 	"""
 	cursor = getCursor(db)
-	cursor.execute("SELECT t.id, u.nom FROM taller t, inscripcio i, usuaris u WHERE t.id = i.id_taller AND i.id_usuari = u.id AND Year(t.data) = Year(%s) ORDER BY t.id, u.data", (datetime.datetime.now().strftime('%Y-%m-%d'),))
+	cursor.execute("SELECT t.id, u.nom FROM taller t, inscripcio i, usuaris u WHERE t.id = i.id_taller AND i.id_usuari = u.id AND Year(t.data) = Year(%s) ORDER BY t.id", (datetime.datetime.now().strftime('%Y-%m-%d'),))
 
 	dic = {}
 	for id_taller, nom_usuari in cursor:
