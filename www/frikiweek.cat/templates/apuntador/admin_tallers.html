@@ -14,9 +14,9 @@
 <div style="margin-bottom:7px">
 	(<strong>{{ count }}</strong> inscrits) - <strong>{{ t.nom }}</strong> {% if my_uid != None and t.id_ponent == my_uid %}[<a href="/admin/send_msg/{{ t.tid }}">envia un missatge</a>]{% endif %}
 
-	<div>
+	<div style="padding-top:10px; padding-left:20px">
 	{% for nom in llista_noms[t.tid] %}
-		{{ nom }}<br>
+		- {{ nom }}<br>
 	{% endfor %}
 	</div>
 </div>
