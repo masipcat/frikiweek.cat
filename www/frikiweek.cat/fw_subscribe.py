@@ -208,7 +208,7 @@ def admin_tallers(db, status=None):
 	elif status == "failed_send":
 		error = "El missatge està buit o ha fallat alguna cosa... :(\nPosa't en contacte nosaltres a través de info@frikiweek.cat"
 	
-	return render_template('apuntador/admin_tallers.html', tallers=fw_db.llista_tallers(db), msg=msg, error=error, my_uid=current_uid())
+	return render_template('apuntador/admin_tallers.html', tallers=fw_db.llista_tallers(db), llista_noms=fw_db.llista_usuaris_inscrits(db), msg=msg, error=error, my_uid=current_uid())
 
 @fw_subs_blueprint.route('/admin/send_msg/<id_taller>', methods=["GET", "POST"])
 @database_connect

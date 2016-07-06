@@ -237,7 +237,6 @@ class Inscripcio(object):
 		"""
 		self.cursor.execute("INSERT INTO inscripcio VALUES(%s, %s, %s)", (self.id_taller, self.id_usuari, self.data))
 
-
 def llista_tallers(db):
 	
 	"""
@@ -252,3 +251,20 @@ def llista_tallers(db):
 		l.append((Taller(tid, nom, descripcio, data, duracio, id_ponent), recompte))
 	
 	return l
+
+def llista_usuaris_inscrits(db):
+
+	"""
+	Aquesta funció donada BD db retorn un diccionari de llista de noms de usuaris inscrits
+	"""
+	cursor = getCursor(db)
+	cursor.execute("SELECT t.id, u.nom FROM taller t, inscripcio i, usuaris u WHERE t.id = i.id_taller AND i.id_usuari = u.id AND Year(t.data) = Year(%s) ORDER BY t.id, u.data", (datetime.datetime.now().strftime('%Y-%m-%d'),))
+
+	dic = {}
+	for id_taller, nom_usuari in cursor:
+		if id_taller in dic:
+			dic[id_taller] += [nom_usuari]
+		else:
+			dic[id_taller] = [nom_usuari]
+
+	return dic
